@@ -62,7 +62,6 @@ $helpText = "";
                     $helpText .= "getmaintenance      Dice se la modalità manutenzione è ATTIVA/DISATTIVATA\n";
                     $helpText .= "maintenance a      Abilita la modalità manutenzione\n";
                     $helpText .= "maintenance d      Disattiva la modalità manutenzione\n";
-                    $helpText .= "close platform      Disabilita la piattaforma\n";
                     $helpText .= "\n\nLista dei tasti disponibili:\n\n";
                     $helpText .= "Del (Canc)            Ripulisce l'area di testo\n";
                     $helpText .= "F9            Mostra la License Key del prodotto\n";
@@ -93,12 +92,6 @@ $helpText = "";
                 case "maintenance d":
                     $myconn = mysqli_connect('localhost','root','mysql', 'accesses') or die (mysqli_error());
                     $sql = "UPDATE systems SET maintenance='false' WHERE id = 1";
-
-                    mysqli_query($myconn,$sql) or die (mysqli_error($conn));
-                    break;
-                case "close platform":
-                    $myconn = mysqli_connect('localhost','root','mysql', 'accesses') or die (mysqli_error());
-                    $sql = "UPDATE systems SET licenseKey='' WHERE id = 1";
 
                     mysqli_query($myconn,$sql) or die (mysqli_error($conn));
                     break;
