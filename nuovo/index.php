@@ -297,9 +297,9 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                             <a class="drop-zone__prompt__accepted_filetype"><b>File accettati:</b> .jpg, .jpeg, .png, .gif, .svg</a></span>
                             <input name="locandina" id="selectfile" class="drop-zone__input" type="file" accept=".jpg, .jpeg, .png, .gif, .svg">
                         </div>
-                        <button onclick="openCanva()" title="Crea una locandina con Canva" class="canvaBtn">Crea una locandina con 
-                        <img alt="Canva" src="https://static-cse.canva.com/_next/static/assets/logo_w2000xh641_3b021976d60d0277e95febf805ad9fe8c7d6d54f86969ec03b83299084b7cb93.png" height="16"></button>
-                        <div class="material-icons" onclick="openHelp(true)" title="Apri istruzioni" style="cursor: pointer;">help_outline</div>
+                        <a onclick="openCanva()" title="Crea una locandina con Canva" class="canvaBtn">Crea una locandina con 
+                        <img alt="Canva" src="https://static-cse.canva.com/_next/static/assets/logo_w2000xh641_3b021976d60d0277e95febf805ad9fe8c7d6d54f86969ec03b83299084b7cb93.png" height="16"></a>
+                        <div class="material-icons" onclick="openHelp(true)" title="Apri istruzioni" style="cursor: pointer; position: relative; top: 30px; left: 20px;">help_outline</div>
                     </div>
                 </div>
                 <p>
@@ -339,7 +339,7 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
             input.setAttribute('value', input.value);
         }
 
-        function openCanva() {
+        function openCanva(e) {
             window.open("https://www.canva.com/design?create&type=TACixUyoqp0&category=tAFBBALx6F8&schema=web-2", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1600,height=1000");
         }
 
