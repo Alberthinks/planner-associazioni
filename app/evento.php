@@ -61,14 +61,17 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
     </head>
     <body style="overflow-y: auto;">
         <div class="container">
+            <?php
+            if (isset($id_evento) && is_numeric($id_evento)) {
+
+            ?>
+            <!-- Header per eventi singoli -->
             <header>
                 <a class="material-symbols-outlined" onclick="history.back()">arrow_back</a>
                 <a class="material-symbols-outlined" onclick="addToCalendar()">event</a>
                 <a class="material-symbols-outlined" onclick="shareEvent()" style="float: right;">share</a>
             </header>
             <?php
-            if (isset($id_evento) && is_numeric($id_evento)) {
-
                 $sql = "SELECT * FROM planner WHERE id=$id_evento";
                 $result = mysqli_query($conn,$sql) or die (mysqli_error($conn));
 
@@ -161,8 +164,17 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         // Parte per il calcolo della data e dell'ora di fine dell'evento per l'app Android
                         $end = explode(" ", $durata);
                         if (strpos($durata, " or") == null) {
+                            if ($end[0].strlen == 1) {
+                                $end[0] = "0".$end[0];
+                            }
                             $endTime = date("Ymd", $data)."00:".$end[0];
                         } else {
+                            if ($end[0].strlen == 1) {
+                                $end[0] = "0".$end[0];
+                            }
+                            if ($end[3].strlen == 1 || $end[3] == "0") {
+                                $end[3] = "0".$end[3];
+                            }
                             $endTime = date("Ymd", $data).$end[0].":".$end[3];
                         }
 
@@ -223,7 +235,11 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                 $sql = "SELECT * FROM planner WHERE data=$str_data";
                 $result = mysqli_query($conn,$sql) or die (mysqli_error($conn));
             ?>
-            <h1>Eventi del <?php echo $data; ?></h1>
+            <!-- Header per eventi multipli -->
+            <header>
+                <a class="material-symbols-outlined" onclick="history.back()">arrow_back</a>
+                <b style="position: relative; bottom: 5px; left: 6px; font-size: 18px;">Eventi del <?php echo $data; ?></b>
+            </header>
             <?php
             if(mysqli_num_rows($result) > 0) {
                 while($fetch = mysqli_fetch_array($result)) {
@@ -239,22 +255,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     $link_prenotazione = stripslashes($fetch['link_prenotazione']);
                     $link_foto_video = stripslashes($fetch['link_foto_video']);
                     $data_modifica = stripslashes($fetch['data_modifica']);
-
-                    echo '<div class="singola_nota">';
-                    echo "<h2>".$titolo."</h2>\n";
-                    echo "<p>".$descrizione."</p>\n";
-
-                    echo '<div class="singola_nota_right">';
-                    if ($link_prenotazione != null || $link_prenotazione != "") {
-                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\" class=\"prenotaBtn\">Prenota evento</a>";
-                    }
-                    echo "<div class=\"share\" style=\"background-color: transparent; width: auto;\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\"></a>";
-                    echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'" class="fb-xfbml-parse-ignore"><img src="../img/icons8-facebook-nuovo.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
-                    echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div></div>';
-                    
-                    echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
 
                     switch ($luogo) {
                         case "Area di sosta per camper - via Argine Po":
@@ -321,25 +321,52 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
                     }
 
-                    echo '<div class="singola_nota_left">';
+                    echo "<div class=\"informazioni\">";
+                    echo "<h2 class=\"titolo\">".$titolo."</h2>\n";
                     echo "<i class=\"material-symbols-outlined\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
                     echo "<i class=\"material-symbols-outlined\">timelapse</i> <b>Durata:</b> ".$durata."<br>\n";
 
                     if ($plusCode == "2896%2b234 Castelmassa, Provincia di Rovigo") {
                         echo "<i class=\"material-symbols-outlined\">location_on</i> <b>Luogo:</b> ".$luogo."<br>\n";
                     } else {
-                        echo "<i class=\"material-symbols-outlined\">location_on</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-symbols-outlined\" style=\"font-size: 16px;\">open_in_new</i></a><br>\n";
+                        echo "<i class=\"material-symbols-outlined\">location_on</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-symbols-outlined\" style=\"font-size: 16px !important;\">open_in_new</i></a><br>\n";
                     }
                     
-                    echo "<i class=\"material-symbols-outlined\">event</i> <b>Tipo:</b> ".$tipo."<br>\n";
-                    echo "<i class=\"material-symbols-outlined\">business</i> <b>Organizzatore:</b> ".$organizzatore."<br>\n";
+                    // Ottenere il logo dell'organizzatore
+                    $db2 = 'users';
+                    $conn2 = mysqli_connect($host,$user,$pass, $db2) or die (mysqli_error());
+                    $organizzatoreCriptato = cripta($organizzatore, "encrypt");
+                    $result2 = mysqli_query($conn2,"SELECT * FROM users WHERE nome_societa='$organizzatoreCriptato'") or die (mysqli_error($conn2));
+                    $fetch2 = mysqli_fetch_array($result2);
 
-                    if ($_SESSION['session_user_lele_planner_0425'] == "lele_administrator_admin" || $_SESSION['session_nome-societa_lele_planner_0425'] == $organizzatore) {
-                        echo "<p><a href=\"../modifica/?id=$id\" class=\"changeBtn\">Modifica</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=\"../elimina/?id=$id&organizzatore=$organizzatore&data=$str_data\" class=\"changeBtn\">Elimina</a></p>";
-                        echo "<b>Ultima modifica:</b> ".$data_modifica;
+                    if ($descrizione != "") {
+                        $descrizione = ": ".$descrizione;
                     }
 
-                    echo '</div></div>';
+                    // Descrizione dell'evento
+                    echo "<p class='descrizione'><b>".$tipo."</b>".$descrizione."</p>\n";
+
+                    if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
+                    echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+
+                    echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
+                    echo "</div>";
+
+
+                    echo "<div class=\"right_content\">";
+                    echo '<img src="../evento/locandine/'.$link_foto_video.'" alt="locandina dell\'evento" id="locandina">';
+
+                    if ($link_prenotazione != null || $link_prenotazione != "") {
+                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\"><i class=\"material-symbols-outlined\">book_online</i> Iscriviti all&apos;evento</button></a>";
+                    }
+                    // Pulsanti di condivisione
+                    echo "<div class=\"share\" style=\"background-color: transparent; width: auto;\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\"></a>";
+                    echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'" class="fb-xfbml-parse-ignore"><img src="../img/icons8-facebook-nuovo.svg"></a>';
+                    echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
+                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
+                    echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div></div>';
+                    
+                    echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
                 }
             }
         }
