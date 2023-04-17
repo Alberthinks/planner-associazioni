@@ -2,26 +2,11 @@
 
 html, body {height: 100%; width: 100%;}
 
-/*html {
-  background-color: #000000 !important;
-  background-image: url('../img/sfondo.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-}*/
-
 body {
   background-color: transparent !important;
 }
-		@media only screen and (max-width: 1050px) {
-  #footer {
-		
-  }
-}
 
-	#footer {
-
-  
+#footer {
   background-color: #333;
   color: #fff;
   padding: 20px 0;
@@ -104,12 +89,11 @@ body {
   margin-right: 20px;
   float: right;
   background-color: transparent;
-  height: 400px;
 }
 
 /* Immagine della locandina */
 
-.locandina {height: 120%; display: block; margin-right: auto; margin-left: auto; cursor: zoom-in;}
+.locandina {height: 450px; display: block; margin-right: auto; margin-left: auto; cursor: zoom-in;}
 
 /* Bottone per prenotare evento dalla nota del calendario */
 .prenotaBtn {
@@ -154,8 +138,6 @@ body {
     margin-right: auto;
     width: 280px;
     background-color: rgba(255, 255, 255, 0.7);
-    /*margin-right: 30px;
-    float: right;*/
   }
 
   .share a img {
@@ -185,16 +167,10 @@ body {
     color: #000000; 
     display: table;
     width: 100%;
-    /*display: flex; 
-    flex-direction: column; 
-    flex-wrap: no-wrap; 
-    flex-direction: row-reverse;*/
     padding-top: 20px; 
     padding-bottom: 20px; 
     padding-right: 50px;
     padding-left: 50px;
-    /*justify-content: space-between;
-    align-items: center;*/
   }
   .singola_nota a {color: #000000;}
   .singola_nota_right {float: right; margin-top: -80px;}
@@ -211,7 +187,6 @@ body {
   }
 	@media only screen and (max-width: 1050px) {
   #footer {
-		
 		bottom: 0;
 		width: 100%;
   }
