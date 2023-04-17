@@ -125,19 +125,25 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
     user-select: none;
-    transition: 0.2s;
+    transition: all 0.4s ease-in-out;
   }
   .prenotaBtn:hover {
     background-color: #27aaaa;
     color: white;
   }
   .prenotaBtn::after {
-    content: '\203A';
+    content: '\2192';
     font-size: 20px;
     padding-left: 10px;
+    transition: all 0.4s;
+    color: black;
+    position: relative;
+    left: 0px;
   }
   .prenotaBtn:hover::after {
     content: '\2192';
+    color: white;
+    left: 10px;
   }
 
   .share {
