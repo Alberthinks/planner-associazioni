@@ -398,7 +398,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         echo '<script>function toggleDisplay() {if(document.getElementById("credits").style.display == "none"){document.getElementById("credits").style.display = "block"} else {document.getElementById("credits").style.display = "none"}}</script>';
         ?>
 
-        <br><br><br><br><br><br><br><br>
+        <br><br><br>
         <footer id="footer">
         <div class="footer-container">
             <div class="footer-row">
