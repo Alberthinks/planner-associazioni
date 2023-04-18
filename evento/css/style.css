@@ -42,8 +42,11 @@ body {
   letter-spacing: 6px;
   margin-bottom: -5px;
   margin-top: 0;
-  text-shadow: 0 0 12px black;
   font-family: 'Permanent Marker', cursive;
+}
+
+#descrizione {
+  overflow: hidden; 
 }
 
 .informazioni {
