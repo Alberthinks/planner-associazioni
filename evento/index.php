@@ -33,6 +33,8 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         <link rel="stylesheet" href="css/style.css" type="text/css">
         <link rel="stylesheet" href="../css/default.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <?php
         
         if (isset($id_evento) && is_numeric($id_evento)) {
@@ -194,10 +196,36 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                                 $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
                         }
 
-                        echo "<h2 class=\"titolo\">".$titolo."</h2>\n";
-
                         echo "<div class=\"informazioni\">";
-                        echo "<p>".$descrizione."</p>\n";
+                        echo "<h2 class=\"titolo\">".$titolo."</h2>";
+                        echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p id=\"descrizione\">".$descrizione."</p><p><a id=\"descrizioneBtn\" href=\"#\">Espandi</a></p>\n";
+                        ?>
+                        <script type="text/javascript">  
+                            $(document).ready(function(){
+                                if ($("#descrizione").height() > 50) {
+                                    $("#descrizioneBtn").show();
+                                    $("#dots").show();
+                                    $("#descrizione").css("height","35px");
+                                } else {
+                                    $("#descrizioneBtn").hide();
+                                    $("#dots").hide();
+                                }
+                            });
+                            $("#descrizioneBtn").click(function(){
+                                if ($("#descrizione").height() > 35) {
+                                    $("#descrizione").css("height","35px");
+                                    $("#dots").show();
+                                    $("#descrizione").css("text-overflow","ellipsis");
+                                    $("#descrizioneBtn").text("Espandi");
+                                } else {
+                                    $("#descrizione").css("height","auto");
+                                    $("#dots").hide();
+                                    $("#descrizione").css("text-overflow","clip");
+                                    $("#descrizioneBtn").text("Comprimi");
+                                }
+                            });
+                        </script> 
+                        <?php
                         echo "<i class=\"material-icons\">calendar_today</i> <b>Data:</b> ".date("d/m/Y", $data)."<br>\n";
                         echo "<i class=\"material-icons\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
                         echo "<i class=\"material-icons\">timelapse</i> <b>Durata:</b> ".$durata."<br>\n";
@@ -272,29 +300,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     $link_foto_video = stripslashes($fetch['link_foto_video']);
                     $data_modifica = stripslashes($fetch['data_modifica']);
 
-                    echo '<div class="singola_nota">';
-                    echo "<h2>".$titolo."</h2>\n";
-                    echo "<p>".$descrizione."</p>\n";
-
-                    echo '<div class="singola_nota_right">';
-                    if ($link_prenotazione != null || $link_prenotazione != "") {
-                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\" class=\"prenotaBtn\">Prenota evento</a>";
-                    }
-
-                    // Locandina dell'evento
-                    echo '<img src="locandine/'.$link_foto_video.'" style="height: 350px; margin-top: 50px;" alt="locandina dell\'evento" onclick="zoomLocandina(\'locandine/'.$link_foto_video.'\')" class="locandina">';
-
-                    // Mostrare la locandina in grande
-                    echo "<script>function zoomLocandina(locandina) {window.open(locandina, '_blank', 'width=550,height=800');}</script>";
-
-                    echo "<div class=\"share\" style=\"background-color: transparent; width: auto;\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\"></a>";
-                    echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'" class="fb-xfbml-parse-ignore"><img src="../img/icons8-facebook-nuovo.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
-                    echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div></div>';
-                    
-                    echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
-
                     switch ($luogo) {
                         case "Area di sosta per camper - via Argine Po":
                             $plusCode = "2876%2BH9 Castelmassa, Provincia di Rovigo";
@@ -360,25 +365,61 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
                     }
 
-                    echo '<div class="singola_nota_left">';
+                    echo "<div>";
+                    echo "<div class=\"informazioni\">";
+                    echo "<h2 class=\"titolo\">".$titolo."</h2>\n";
                     echo "<i class=\"material-icons\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
                     echo "<i class=\"material-icons\">timelapse</i> <b>Durata:</b> ".$durata."<br>\n";
 
                     if ($plusCode == "2896%2b234 Castelmassa, Provincia di Rovigo") {
-                        echo "<i class=\"material-icons\">place</i> <b>Luogo:</b> ".$luogo."<br>\n";
+                        echo "<i class=\"material-icons\">location_on</i> <b>Luogo:</b> ".$luogo."<br>\n";
                     } else {
-                        echo "<i class=\"material-icons\">place</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-icons\" style=\"font-size: 16px;\">launch</i></a><br>\n";
+                        echo "<i class=\"material-icons\">location_on</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-icons\" style=\"font-size: 16px !important;\">open_in_new</i></a><br>\n";
                     }
                     
-                    echo "<i class=\"material-icons\">event</i> <b>Tipo:</b> ".$tipo."<br>\n";
-                    echo "<i class=\"material-icons\">business</i> <b>Organizzatore:</b> ".$organizzatore."<br>\n";
+                    // Ottenere il logo dell'organizzatore
+                    $db2 = 'users';
+                    $conn2 = mysqli_connect($host,$user,$pass, $db2) or die (mysqli_error());
+                    $organizzatoreCriptato = cripta($organizzatore, "encrypt");
+                    $result2 = mysqli_query($conn2,"SELECT * FROM users WHERE nome_societa='$organizzatoreCriptato'") or die (mysqli_error($conn2));
+                    $fetch2 = mysqli_fetch_array($result2);
+
+                    if ($descrizione != "") {
+                        $descrizione = ": ".$descrizione;
+                    }
+
+                    // Descrizione dell'evento
+                    echo "<p class='descrizione'><b>".$tipo."</b>".$descrizione."</p>\n";
 
                     if ($_SESSION['session_user_lele_planner_0425'] == "lele_administrator_admin" || $_SESSION['session_nome-societa_lele_planner_0425'] == $organizzatore) {
                         echo "<p><a href=\"../modifica/?id=$id\" class=\"changeBtn\">Modifica</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=\"../elimina/?id=$id&organizzatore=$organizzatore&data=$str_data\" class=\"changeBtn\">Elimina</a></p>";
                         echo "<b>Ultima modifica:</b> ".$data_modifica;
                     }
 
-                    echo '</div></div>';
+                    echo '</div>';
+                    echo "<div class=\"right_content\">";
+
+                    // Locandina dell'evento
+                    echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;" alt="locandina dell\'evento" id="locandina" onclick="zoomLocandina()" class="locandina">';
+
+                    // Pulsante per prenotare l'evento
+                    if ($link_prenotazione != null || $link_prenotazione != "") {
+                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\">Iscriviti all&apos;evento</button></a>";
+                    }
+
+                    // Area con i pulsanti di condivisione sui social network
+                    echo "<div class=\"share\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo."+".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\" style=\"margin-left: 0;\"></a>";
+                    echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-facebook-nuovo.svg"></a>';
+                    echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
+                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
+                    echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div>';
+
+                    echo "</div>";
+                    echo '</div>';
+                    // Copiare l'URL dell'evento attuale per condividerlo con altri
+                    echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
+                    // Mostrare la locandina in grande
+                    echo "<script>var locandina=document.getElementById('locandina').src; function zoomLocandina() {window.open(locandina, '_blank', 'width=550,height=800');}</script>";
                 }
             }
         }
