@@ -151,10 +151,8 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                                                 $data_evento = date("d-m-Y", $fetch['data']);
                                             }
                                         
-                                            $contenuto = "<div class=\"nota\">
-                                                            <a href=\"evento.php?id=$id\">
+                                            $contenuto = "<div class=\"nota\" onclick=\"openEvent(".$id.", 'null')\">
                                                             <p class=\"title\">".$titolo."</p>
-                                                            </a>
                                                             </div>";
                                         }
                                         $num_rows = mysqli_num_rows($result);
@@ -167,19 +165,17 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                                                     $data_evento = date("d-m-Y", $fetch['data']);
                                                 }
                                             
-                                                $contenuto = "<a href=\"evento.php?day=$str_data\"><div class=\"nota multipla\">".$num_rows." eventi...</div></a>";
+                                                $contenuto = "<a onclick=\"openEvent(".$str_data.", '".date("d/m/Y", $str_data)."')\"><div class=\"nota multipla\">".$num_rows." eventi...</div></a>";
                                         }
-                                    
-                                    
                                     }
                                 }
                             }
 
                             if($data == $oggi)
                             {
-                                echo "<td class=\"oggi\" onclick=\"newEvent(".$data.")\"><span class=\"data\">".$day."</span>".$contenuto."</td>";
+                                echo "<td class=\"oggi\"><span class=\"data\">".$day."</span>".$contenuto."</td>";
                             } else {
-                                echo "<td onclick=\"newEvent(".$data.")\"><span class=\"data\">".$day."</span>".$contenuto."</td>";
+                                echo "<td><span class=\"data\">".$day."</span>".$contenuto."</td>";
                             }
                         }
 
@@ -188,6 +184,13 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                         echo "</tr>";
                         }
                     }
+
+                    echo "<script>
+                            // Funzione per aggiungere l'evento al calendario
+                            function openEvent(id, date) {
+                                APPlanner.eventDetails(id, date);
+                            }
+                        </script>";
 
                     // Se le celle dell'ultima riga sono meno di 7, se ne aggiungono altre
                     if ($j<42) {
@@ -207,10 +210,5 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                 ?>
             </div>
         </center>
-        <script>
-            /*function newEvent(data) {
-                location.href = "nuovo?data=" + data;
-            }*/
-        </script>
     </body>
 </html>
