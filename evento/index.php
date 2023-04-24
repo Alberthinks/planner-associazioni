@@ -48,13 +48,25 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     }
                 }
         ?>
-        <!-- Social meta tags -->
+        <!-- Social meta tags -->        
+        <meta name="robots" content="all" />
+        <meta name="revisit-after" content="8" />
+        <meta name="author" content="Albertin Emanuele, Paun Catalin-Adrian">
+        <meta name="title" content="<?php echo $titolo; ?>">
+        <meta name="description" content="<?php echo $descrizione; ?>">
+        <meta name="keywords" content="planner, castelmassa, associazioni, eventi Castelmassa, calto, ceneselli, castelnovo bariano, università popolare">
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="<?php echo $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']; ?>">
         <meta property="og:title" content="<?php echo $titolo; ?>">
-        <meta property="og:type" content="article" />
         <meta property="og:description" content="<?php echo $descrizione; ?>">
-        <meta property="og:image" content="../img/Logo.png">
-        <meta property="og:url" content="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <meta name="twitter:card" content="summary_large_image">
+        <meta property="og:image" content="../img/icon/apple-touch-icon.png">
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="<?php echo $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']; ?>">
+        <meta property="twitter:title" content="<?php echo $titolo; ?>">
+        <meta property="twitter:description" content="<?php echo $descrizione; ?>">
+        <meta property="twitter:image" content="../img/icon/apple-touch-icon.png">
         <?php
         }
         ?>
@@ -92,10 +104,10 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
             <?php
             } else {
             ?>
-            <div class="header-scritte"><a href="../login" class="evidenziato">Accedi</a> per inserire nuovi eventi</div>
+            <div class="header-scritte"><a href="../login?redirect=evento%3Fid%3D<?php echo $id_evento; ?>" class="evidenziato">Accedi</a> per inserire nuovi eventi</div>
             <div class="logout">
                 <div class="tooltip">
-                    <a href="../login" class="material-icons headerbutton">login</a>
+                    <a href="../login?redirect=evento%3Fid%3D<?php echo $id_evento; ?>" class="material-icons headerbutton">login</a>
                     <span class="tooltiptext">Login</span>
                 </div>
             </div>
@@ -198,7 +210,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
                         echo "<div class=\"informazioni\">";
                         echo "<h2 class=\"titolo\">".$titolo."</h2>";
-                        echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p id=\"descrizione\">".$descrizione."</p><p><a id=\"descrizioneBtn\" href=\"#\">Espandi</a></p>\n";
+                        echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione\">".$descrizione."</p><p><a id=\"descrizioneBtn\" href=\"#\">Espandi</a></p>\n";
                         ?>
                         <script type="text/javascript">  
                             $(document).ready(function(){
@@ -257,14 +269,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
                         echo "<div class=\"right_content\">";
 
-                        // Locandina dell'evento
-                        echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;" alt="locandina dell\'evento" id="locandina" onclick="zoomLocandina()" class="locandina">';
-
-                        // Pulsante per prenotare l'evento
-                        if ($link_prenotazione != null || $link_prenotazione != "") {
-                            echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\">Iscriviti all&apos;evento</button></a>";
-                        }
-
                         // Area con i pulsanti di condivisione sui social network
                         echo "<div class=\"share\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo."+".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\" style=\"margin-left: 0;\"></a>";
                         echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-facebook-nuovo.svg"></a>';
@@ -272,7 +276,21 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
                         echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div>';
 
+                        // Locandina dell'evento
+                        if ($link_foto_video != "locandina_default.png") {
+                            $onclick = " cursor: zoom-in;\" onclick=\"zoomLocandina('locandine/".$link_foto_video."')\"";
+                        } else {
+                            $onclick = "\"";
+                        }
+                        echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;'.$onclick.' alt="locandina dell\'evento" id="locandina" class="locandina">';
+                        
+                        // Pulsante per prenotare l'evento
+                        if ($link_prenotazione != null || $link_prenotazione != "") {
+                            echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\">Iscriviti all&apos;evento</button></a>";
+                        }
+
                         echo "</div>";
+
                         // Copiare l'URL dell'evento attuale per condividerlo con altri
                         echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
                         // Mostrare la locandina in grande
@@ -389,7 +407,34 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     }
 
                     // Descrizione dell'evento
-                    echo "<p class='descrizione'><b>".$tipo."</b>".$descrizione."</p>\n";
+                    echo "<span id=\"dots".$id."\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn".$id."\" href=\"#\">Espandi</a></p>\n";
+                    ?>
+                    <script type="text/javascript">  
+                        $(document).ready(function(){
+                            if ($("#descrizione<?php echo $id; ?>").height() > 50) {
+                                $("#descrizioneBtn<?php echo $id; ?>").show();
+                                $("#dots<?php echo $id; ?>").show();
+                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                            } else {
+                                $("#descrizioneBtn<?php echo $id; ?>").hide();
+                                $("#dots<?php echo $id; ?>").hide();
+                            }
+                        });
+                        $("#descrizioneBtn<?php echo $id; ?>").click(function(){
+                            if ($("#descrizione<?php echo $id; ?>").height() > 35) {
+                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                                $("#dots<?php echo $id; ?>").show();
+                                $("#descrizione<?php echo $id; ?>").css("text-overflow","ellipsis");
+                                $("#descrizioneBtn<?php echo $id; ?>").text("Espandi");
+                            } else {
+                                $("#descrizione<?php echo $id; ?>").css("height","auto");
+                                $("#dots<?php echo $id; ?>").hide();
+                                $("#descrizione<?php echo $id; ?>").css("text-overflow","clip");
+                                $("#descrizioneBtn<?php echo $id; ?>").text("Comprimi");
+                            }
+                        });
+                    </script> 
+                    <?php
 
                     if ($_SESSION['session_user_lele_planner_0425'] == "lele_administrator_admin" || $_SESSION['session_nome-societa_lele_planner_0425'] == $organizzatore) {
                         echo "<p><a href=\"../modifica/?id=$id\" class=\"changeBtn\">Modifica</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=\"../elimina/?id=$id&organizzatore=$organizzatore&data=$str_data\" class=\"changeBtn\">Elimina</a></p>";
@@ -399,14 +444,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     echo '</div>';
                     echo "<div class=\"right_content\">";
 
-                    // Locandina dell'evento
-                    echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;" alt="locandina dell\'evento" id="locandina" onclick="zoomLocandina()" class="locandina">';
-
-                    // Pulsante per prenotare l'evento
-                    if ($link_prenotazione != null || $link_prenotazione != "") {
-                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\">Iscriviti all&apos;evento</button></a>";
-                    }
-
                     // Area con i pulsanti di condivisione sui social network
                     echo "<div class=\"share\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo."+".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\" style=\"margin-left: 0;\"></a>";
                     echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-facebook-nuovo.svg"></a>';
@@ -414,12 +451,31 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
                     echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div>';
 
-                    echo "</div>";
+                    // Locandina dell'evento
+                    
+                    if ($link_foto_video == "") {
+                        $link_foto_video = "locandina_default.png";
+                    }
+                    if ($link_foto_video != "locandina_default.png") {
+                        $onclick = " cursor: zoom-in;\" onclick=\"zoomLocandina('locandine/".$link_foto_video."')\"";
+                    } else {
+                        $onclick = "\"";
+                    }
+                    echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;'.$onclick.' alt="locandina dell\'evento" id="locandina" class="locandina">';
+
+                    // Pulsante per prenotare l'evento
+                    if ($link_prenotazione != null || $link_prenotazione != "") {
+                        echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\">Iscriviti all&apos;evento</button></a>";
+                    }
+
                     echo '</div>';
+
+                    echo '</div>';
+
+                    // Mostrare la locandina in grande
+                    echo "<script>function zoomLocandina(locandina) {window.open(locandina, '_blank', 'width=550,height=800');}</script>";   
                     // Copiare l'URL dell'evento attuale per condividerlo con altri
                     echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
-                    // Mostrare la locandina in grande
-                    echo "<script>var locandina=document.getElementById('locandina').src; function zoomLocandina() {window.open(locandina, '_blank', 'width=550,height=800');}</script>";
                 }
             }
         }
