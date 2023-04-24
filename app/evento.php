@@ -35,6 +35,8 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         <!--<link rel="stylesheet" href="../evento/css/style.css" type="text/css">-->
         <link rel="stylesheet" href="../css/default_phone.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <!-- JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <?php
         
         if (isset($id_evento) && is_numeric($id_evento)) {
@@ -65,12 +67,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
             if (isset($id_evento) && is_numeric($id_evento)) {
 
             ?>
-            <!-- Header per eventi singoli -->
-            <header>
-                <a class="material-symbols-outlined" onclick="history.back()">arrow_back</a>
-                <a class="material-symbols-outlined" onclick="addToCalendar()">event</a>
-                <a class="material-symbols-outlined" onclick="shareEvent()" style="float: right;">share</a>
-            </header>
             <?php
                 $sql = "SELECT * FROM planner WHERE id=$id_evento";
                 $result = mysqli_query($conn,$sql) or die (mysqli_error($conn));
@@ -164,31 +160,19 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         // Parte per il calcolo della data e dell'ora di fine dell'evento per l'app Android
                         $end = explode(" ", $durata);
                         if (strpos($durata, " or") == null) {
-                            if ($end[0].strlen == 1) {
+                            if (strlen($end[0]) == 1) {
                                 $end[0] = "0".$end[0];
                             }
                             $endTime = date("Ymd", $data)."00:".$end[0];
                         } else {
-                            if ($end[0].strlen == 1) {
+                            if (strlen($end[0]) == 1) {
                                 $end[0] = "0".$end[0];
                             }
-                            if ($end[3].strlen == 1 || $end[3] == "0") {
+                            if (strlen($end[3]) == 1) {
                                 $end[3] = "0".$end[3];
                             }
                             $endTime = date("Ymd", $data).$end[0].":".$end[3];
                         }
-
-                        echo "<script>
-                            // Funzione per aggiungere l'evento al calendario
-                            function addToCalendar() {
-                                APPlanner.addToCalendar(\"".$titolo."\", \"".$descrizione."\", \"".$luogo."\", \"".date("Ymd", $data).$ora."\", \"".$endTime."\");
-                            }
-
-                            // Funzione per condividere l'evento con altre persone
-                            function shareEvent() {
-                                APPlanner.shareEvent(\"".$titolo."\",\"".$url."\");
-                            }
-                        </script>";
 
                         echo "<div class=\"informazioni\">";
                         echo "<h2 class=\"titolo\">".$titolo."</h2>\n";
@@ -214,10 +198,53 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         }
 
                         // Descrizione dell'evento
-                        echo "<p class='descrizione'><b>".$tipo."</b>".$descrizione."</p>\n";
+                        echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione\" style=\"height: auto;\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn\">Espandi</a></p>\n";
+                        ?>
+                        <script type="text/javascript">  
+                            $(document).ready(function(){
+                                if ($("#descrizione").height() > 50) {
+                                    $("#descrizioneBtn").show();
+                                    $("#dots").show();
+                                    $("#descrizione").css("height","35px");
+                                } else {
+                                    $("#descrizioneBtn").hide();
+                                    $("#dots").hide();
+                                }
+                            });
+                            $("#descrizioneBtn").click(function(){
+                                if ($("#descrizione").height() > 35) {
+                                    $("#descrizione").css("height","35px");
+                                    $("#dots").show();
+                                    $("#descrizione").css("text-overflow","ellipsis");
+                                    $("#descrizioneBtn").text("Espandi");
+                                } else {
+                                    $("#descrizione").css("height","auto");
+                                    $("#dots").hide();
+                                    $("#descrizione").css("text-overflow","clip");
+                                    $("#descrizioneBtn").text("Comprimi");
+                                }
+                            });
+                        </script> 
 
+                        <?php
                         if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
-                        echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                            echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                        
+                        echo "<p><a onclick=\"addToCalendar()\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
+                        echo "<p><a onclick=\"shareEvent()\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
+
+
+                        echo "<script>
+                            // Funzione per aggiungere l'evento al calendario
+                            function addToCalendar() {
+                                APPlanner.addToCalendar(\"".$titolo."\", \"".$descrizione."\", \"".$luogo."\", \"".date("Ymd", $data).$ora."\", \"".$endTime."\");
+                            }
+
+                            // Funzione per condividere l'evento con altre persone
+                            function shareEvent() {
+                                APPlanner.shareEvent(\"".$titolo."\",\"".$url."\");
+                            }
+                        </script>";
 
                         echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
                         echo "</div>";
@@ -235,11 +262,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                 $sql = "SELECT * FROM planner WHERE data=$str_data";
                 $result = mysqli_query($conn,$sql) or die (mysqli_error($conn));
             ?>
-            <!-- Header per eventi multipli -->
-            <header>
-                <a class="material-symbols-outlined" onclick="history.back()">arrow_back</a>
-                <b style="position: relative; bottom: 5px; left: 6px; font-size: 18px;">Eventi del <?php echo $data; ?></b>
-            </header>
             <?php
             if(mysqli_num_rows($result) > 0) {
                 while($fetch = mysqli_fetch_array($result)) {
@@ -344,46 +366,80 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     }
 
                     // Descrizione dell'evento
-                    echo "<p class='descrizione'><b>".$tipo."</b>".$descrizione."</p>\n";
+                    echo "<span id=\"dots".$id."\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn".$id."\">Espandi</a></p>\n";
+                    ?>
+                    <script type="text/javascript">  
+                        $(document).ready(function(){
+                            if ($("#descrizione<?php echo $id; ?>").height() > 50) {
+                                $("#descrizioneBtn<?php echo $id; ?>").show();
+                                $("#dots<?php echo $id; ?>").show();
+                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                            } else {
+                                $("#descrizioneBtn<?php echo $id; ?>").hide();
+                                $("#dots<?php echo $id; ?>").hide();
+                            }
+                        });
+                        $("#descrizioneBtn<?php echo $id; ?>").click(function(){
+                            if ($("#descrizione<?php echo $id; ?>").height() > 35) {
+                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                                $("#dots<?php echo $id; ?>").show();
+                                $("#descrizione<?php echo $id; ?>").css("text-overflow","ellipsis");
+                                $("#descrizioneBtn<?php echo $id; ?>").text("Espandi");
+                            } else {
+                                $("#descrizione<?php echo $id; ?>").css("height","auto");
+                                $("#dots<?php echo $id; ?>").hide();
+                                $("#descrizione<?php echo $id; ?>").css("text-overflow","clip");
+                                $("#descrizioneBtn<?php echo $id; ?>").text("Comprimi");
+                            }
+                        });
+                    </script> 
+                    <?php
 
                     if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
-                    echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                        echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                        
+                    echo "<p><a onclick=\"addToCalendar()\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
+                    echo "<p><a onclick=\"shareEvent()\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
+
+                    // Parte per il calcolo della data e dell'ora di fine dell'evento per l'app Android
+                    $end = explode(" ", $durata);
+                    if (strpos($durata, " or") == null) {
+                        if (strlen($end[0]) == 1) {
+                            $end[0] = "0".$end[0];
+                        }
+                        $endTime = date("Ymd", $data)."00:".$end[0];
+                    } else {
+                        if (strlen($end[0]) == 1) {
+                            $end[0] = "0".$end[0];
+                        }
+                        if (strlen($end[3]) == 1) {
+                            $end[3] = "0".$end[3];
+                        }
+                        $endTime = date("Ymd", $data).$end[0].":".$end[3];
+                    }
+
+                    echo "<script>
+                        // Funzione per aggiungere l'evento al calendario
+                        function addToCalendar() {
+                            APPlanner.addToCalendar(\"".$titolo."\", \"".$descrizione."\", \"".$luogo."\", \"".date("Ymd", $data).$ora."\", \"".$endTime."\");
+                        }
+
+                        // Funzione per condividere l'evento con altre persone
+                        function shareEvent() {
+                            APPlanner.shareEvent(\"".$titolo."\",\"".$url."\");
+                        }
+                    </script>";
 
                     echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
                     echo "</div>";
 
-
-                    echo "<div class=\"right_content\">";
-                    echo '<img src="../evento/locandine/'.$link_foto_video.'" alt="locandina dell\'evento" id="locandina">';
-
                     if ($link_prenotazione != null || $link_prenotazione != "") {
                         echo "<a href=\"".$link_prenotazione."\" target=\"_blank\" title=\"Prenota evento\"><button class=\"prenotaBtn\"><i class=\"material-symbols-outlined\">book_online</i> Iscriviti all&apos;evento</button></a>";
                     }
-                    // Pulsanti di condivisione
-                    echo "<div class=\"share\" style=\"background-color: transparent; width: auto;\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\"></a>";
-                    echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'" class="fb-xfbml-parse-ignore"><img src="../img/icons8-facebook-nuovo.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
-                    echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div></div>';
-                    
-                    echo '<script>function copyUrl(url) {navigator.clipboard.writeText(url);alert("Link copiato negli appunti");}</script>';
                 }
             }
         }
             ?>
         </div>
-
-        <?php
-        echo '<a class="material-symbols-outlined info" onclick="toggleDisplay()">info</a>';
-        echo '<div id="credits" style="display: none;">';
-        echo '<a target="_blank" href="https://icons8.com/icon/16713/whatsapp">WhatsApp</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
-        echo '<a target="_blank" href="https://icons8.com/icon/114450/twitter-cerchiato">Twitter cerchiato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
-        echo '<a target="_blank" href="https://icons8.com/icon/uLWV5A9vXIPu/facebook-nuovo">Facebook Nuovo</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
-        echo '<a target="_blank" href="https://icons8.com/icon/114445/linkedin-cerchiato">LinkedIn cerchiato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
-        echo '<a target="_blank" href="https://icons8.com/icon/kktvCbkDLbNb/link">Link</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>';
-        echo '<!--Foto (sfondo) di <a href="https://unsplash.com/@antenna?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Antenna</a> su <a href="https://unsplash.com/it/s/foto/evento-sportivo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>-->';
-        echo '</div>';
-        echo '<script>function toggleDisplay() {if(document.getElementById("credits").style.display == "none"){document.getElementById("credits").style.display = "block"} else {document.getElementById("credits").style.display = "none"}}</script>';
-        ?>
     </body>
 </html>
