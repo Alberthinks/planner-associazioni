@@ -45,8 +45,10 @@ body {
   font-family: 'Permanent Marker', cursive;
 }
 
-#descrizione {
-  overflow: hidden; 
+.descrizione {
+  overflow: hidden;
+  width: 90%;
+  text-align: justify;
 }
 
 .informazioni {
@@ -96,7 +98,7 @@ body {
 
 /* Immagine della locandina */
 
-.locandina {height: 450px; display: block; margin-right: auto; margin-left: auto; cursor: zoom-in;}
+.locandina {height: 450px; display: block; margin-right: auto; margin-left: auto; margin-top: 26px;}
 
 /* Bottone per prenotare evento dalla nota del calendario */
 .prenotaBtn {
