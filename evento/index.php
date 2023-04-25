@@ -383,7 +383,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
                     }
 
-                    echo "<div>";
+                    echo "<div style='margin-top: 40px; overflow: hidden;'>";
                     echo "<div class=\"informazioni\">";
                     echo "<h2 class=\"titolo\">".$titolo."</h2>\n";
                     echo "<i class=\"material-icons\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
@@ -459,7 +459,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     if ($link_foto_video != "locandina_default.png") {
                         $onclick = " cursor: zoom-in;\" onclick=\"zoomLocandina('locandine/".$link_foto_video."')\"";
                     } else {
-                        $onclick = "\"";
+                        $onclick = "height: 100px;\"";
                     }
                     echo '<img src="locandine/'.$link_foto_video.'" style="margin-bottom: 30px;'.$onclick.' alt="locandina dell\'evento" id="locandina" class="locandina">';
 
