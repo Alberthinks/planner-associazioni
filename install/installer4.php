@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 $pass = password_hash("cambiami", PASSWORD_BCRYPT);
 $nome = cripta("admin", "encrypt");
 $o = cripta("o", "encrypt");
-$uname = cripta("admin", "encrypt");
+$uname = cripta("lele_administrator_admin", "encrypt");
 $mail = cripta("prova@fakemail.xx", "encrypt");
 $org = cripta("I.I.S. Primo Levi - Badia Polesine", "encrypt");
 $log = cripta("logos/iisplevi.jpg","encrypt");
