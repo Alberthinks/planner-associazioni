@@ -24,6 +24,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
         ?>
         <!-- Header -->
         <header>
+            <a class="material-icons" href="../">home</a>
             Benvenuto, <?php echo $nome; ?>
             <a href="../../login/logout.php" class="material-icons headerbutton">logout</a>
         </header>
