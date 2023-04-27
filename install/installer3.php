@@ -11,7 +11,7 @@ if (!$conn) {
 $sql = "CREATE TABLE planner (
 id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 titolo VARCHAR(255) NOT NULL,
-descrizione VARCHAR(500),
+descrizione TEXT,
 data VARCHAR(25) NOT NULL,
 ora VARCHAR(25) NOT NULL,
 durata VARCHAR(25) NOT NULL,
