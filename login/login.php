@@ -23,6 +23,8 @@
             <p><strong>Attenzione!
                 <?php
                     include "../default.php";
+
+                    $redirect = $_GET['redirect'];
                     
                     session_start();
                     $config = [
@@ -74,9 +76,15 @@
                             date_default_timezone_set("Europe/Rome");
                             //$now = date("d F Y H:i:sa", time());
 
+                            
+                            $accountUsername = cripta($user['username'], "decrypt");
+                            if($accountUsername == "admin") {
+                                $accountUsername = "lele_administrator_admin";
+                            }
+
                             session_regenerate_id();
                             $_SESSION['session_id_lele_planner_0425'] = session_id();
-                            $_SESSION['session_user_lele_planner_0425'] = cripta($user['username'], "decrypt");
+                            $_SESSION['session_user_lele_planner_0425'] = $accountUsername;
                             $_SESSION['session_ao_lele_planner_0425'] = cripta($user['ao'], "decrypt");
                             $_SESSION['session_nome_lele_planner_0425'] = cripta($user['nome'], "decrypt");
                             $_SESSION['session_cognome_lele_planner_0425'] = cripta($user['cognome'], "decrypt");
@@ -97,7 +105,7 @@
             
                             if(mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
                                 if($result = mysqli_query($myconn,$mysql) or die (mysqli_error($conn))) {
-                                    header('Location: ../');
+                                    header('Location: ../'.$redirect);
                                 }
                                 exit;
                               } else {
