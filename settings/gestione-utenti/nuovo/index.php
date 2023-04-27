@@ -25,7 +25,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
                 $email = cripta(addslashes($_POST['email']),'encrypt');
                 $password = addslashes($_POST['password']);
                 $nome_societa = cripta(addslashes($_POST['nome_societa']),'encrypt');
-                $last_access = cripta(addslashes($_POST['last_access']),'encrypt');
+                $last_access = "";
                 $ao = cripta(addslashes($_POST['ao']),'encrypt');
                 $username = cripta(addslashes($_POST['username']),'encrypt');
                 $passuord = password_hash($password, PASSWORD_BCRYPT);
@@ -72,6 +72,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
         <h1>Aggiungi un nuovo utente</h1>
         <!-- Form per inserire il nuovo utente -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" autocomplete="off">
+            <p>Non usare n&eacute; apici singoli n&eacute; apici doppi (' o ")</p>
             <label for="nome">Nome:</label>
             <input type="text" name="nome" id="nome"><br>
 
@@ -95,9 +96,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
             <input type="text" name="nome_societa" id="nome_societa"><br>
 
             <label for="logo">Logo dell'associazione:</label>
-            <input type="file" name="logo" id="logo" accept="image/*">
-
-            <input type="hidden" name="last_access" value=" "><br>
+            <input type="file" name="logo" id="logo" accept="image/*"><br>
 
             <input type="submit" name="submit" value="Registra utente">
         </form>
