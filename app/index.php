@@ -68,7 +68,7 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                     );
 
                     // Valore usato dall'app AP Planner per mostrare solo gli eventi di una determinata associazione
-                    $plannerIDnumber = $_GET['plannerID'];
+                    /*$plannerIDnumber = $_GET['plannerID'];
                     switch ($plannerIDnumber) {
                         case 0:
                             $plannerID = "I.I.S. Primo Levi - Badia Polesine";
@@ -81,7 +81,10 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                             break;
                         default:
                             $plannerID = "";
-                    }
+                    }*/
+
+                    $plannerID = $_GET['plannerID'];
+
 
                     $cols = 7;
                     $days = date("t",mktime(0, 0, 0, $m, 1, $y)); 
@@ -138,8 +141,12 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                                     $str_data = $fetch['data'];
                                     if ($str_data == $data)
                                     {
-                                        $sql = "SELECT * FROM planner WHERE data=$str_data AND organizzatore='$plannerID'";
-                                        //$sql = "SELECT * FROM planner WHERE data=$str_data";
+                                        if (isset($_GET['plannerID'])) {
+                                            $sql = "SELECT * FROM planner WHERE data=$str_data AND organizzatore='$plannerID'";
+                                        } else {
+                                            $sql = "SELECT * FROM planner WHERE data=$str_data";
+                                        }
+                                        
                                         $result = mysqli_query($conn,$sql) or die (mysqli_error($conn));
                                         
                                         if(mysqli_num_rows($result) == 1)
