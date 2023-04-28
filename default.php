@@ -4,6 +4,9 @@ $default_username = "root";
 $default_password = "mysql";
 $default_dbname = "accesses";
 
+// Nasconde gli errori agli utenti
+ini_set("display_errors", false);
+
 // Create connection
 $default_conn = mysqli_connect($default_servername, $default_username, $default_password, $default_dbname);
 $default_query = mysqli_query($default_conn,"SELECT * FROM systems") or die (mysqli_error($default_conn));
