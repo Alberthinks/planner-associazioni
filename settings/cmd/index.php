@@ -57,6 +57,7 @@ $helpText = "";
                     $helpText .= "cls      Ripulisce l'area di testo\n";
                     $helpText .= "exit      Chiude il prompt comandi\n";
                     $helpText .= "help      Mostra le funzioni disponibili con questo prompt di comandi\n";
+                    $helpText .= "info      Restituisce le informazioni relative alla piattaforma\n";
                     $helpText .= "showLicenseKey      Mostra la License Key del prodotto\n";
                     $helpText .= "changeLicenseKey      Modifica la License Key del prodotto (NON IMPLEMENTATA)\n";
                     $helpText .= "getmaintenance      Dice se la modalità manutenzione è ATTIVA/DISATTIVATA\n";
@@ -97,6 +98,19 @@ $helpText = "";
                     break;
                 case "changeLicenseKey":
                     $helpText = "Funzione non ancora supportata.";
+                    break;
+                case "info":
+                    $default_conn = mysqli_connect('localhost', 'root', 'mysql', 'accesses');
+                    $default_query = mysqli_query($default_conn,"SELECT * FROM systems") or die (mysqli_error($default_conn));
+                    $default_fetch = mysqli_fetch_array($default_query) or die (mysqli_error());
+
+                    // Nome della piattaforma
+                    $nome_app = $default_fetch['appName'];
+                    // LicenseKey usata per l'attivazione
+                    $licenseKey = $default_fetch['licenseKey'];
+                    // Versione della piattaforma
+                    $version = $default_fetch['version'];
+                    $helpText = "Dettagli della piattaforma:\n\nNome:\t\t".$nome_app."\nLicenseKey:\t".$licenseKey."\nVersione:\t".$version;
                     break;
                 default:
                     $helpText = "La funzione inserita non corrisponde a nessuna keyword del prompt comandi.";
