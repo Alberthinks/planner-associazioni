@@ -12,7 +12,7 @@ $installDate = date("d/m/Y");
 $licenseKey = $_POST['licenseKey'];
 
 $sql = "INSERT INTO systems (appName,licenseKey,version,maintenance,installDate)
-VALUES ('Planner associazioni','$licenseKey','04/2023','false','$installDate')";
+VALUES ('Planner associazioni','$licenseKey','05/2023','false','$installDate')";
 
 if ($conn->query($sql) === TRUE) {
   echo "<p>Il database di sistema &egrave; stato creato e configurato correttamente.</p>\n";
