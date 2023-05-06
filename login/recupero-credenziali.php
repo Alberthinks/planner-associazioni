@@ -32,7 +32,10 @@ if (isset($_POST['send_password']) && $_POST['send_password'] == "Conferma") {
 
     if ($username == $_POST['username'] && $email == $_POST['email']) {
         $newPSW = "cambiami".rand(101230, 999878).date("dYmhs",time());
-        echo "Abbiamo appena resettato la password. La tua nuova password &egrave;: <code>".$newPSW."</code>";
+        $newPassword = password_hash($newPSW, PASSWORD_BCRYPT);
+        if($result = mysqli_query($conn,"UPDATE `users` SET `password`='$newPassword' WHERE username='".cripta($username, "encrypt")."' AND email='".cripta($email, "encrypt")."'") or die (mysqli_error($conn))) {
+            echo "Abbiamo appena resettato la password. La tua nuova password &egrave;: <code>".$newPSW."</code>";
+        }
     } else {
         if ($username != $_POST['username']) {
             echo "Lo username &egrave; errato!";
