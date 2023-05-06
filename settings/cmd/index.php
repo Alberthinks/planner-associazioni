@@ -110,7 +110,9 @@ $helpText = "";
                     $licenseKey = $default_fetch['licenseKey'];
                     // Versione della piattaforma
                     $version = $default_fetch['version'];
-                    $helpText = "Dettagli della piattaforma:\n\nNome:\t\t".$nome_app."\nLicenseKey:\t".$licenseKey."\nVersione:\t".$version;
+                    // Data installazione
+                    $installDate = $default_fetch['installDate'];
+                    $helpText = "Dettagli della piattaforma:\n\nNome:\t\t\t".$nome_app."\nLicenseKey:\t\t".$licenseKey."\nVersione:\t\t".$version."\nData di installazione:\t".$installDate;
                     break;
                 default:
                     $helpText = "La funzione inserita non corrisponde a nessuna keyword del prompt comandi.";
