@@ -5,83 +5,6 @@ include '../../config.php';
 
 $db = 'users';
 $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
-
-if (isset($_POST['submit'])) {
-    $associazione = addslashes($_POST['nome_associazione']);
-    $nome = addslashes($_POST['nome']);
-    $cognome = addslashes($_POST['cognome']);
-    $ao = addslashes($_POST['ao']);
-    $email = addslashes($_POST['email']);
-    $username = addslashes($_POST['username']);
-    $psw = $_POST['psw'];
-    $psw2 = $_POST['psw2'];
-
-    
-    $associazione_db = cripta(addslashes($associazione),'encrypt');
-    $nome_db = cripta(addslashes($nome),'encrypt');
-    $cognome_db = cripta(addslashes($cognome),'encrypt');
-    $ao_db = cripta(addslashes($ao),'encrypt');
-    $email_db = cripta(addslashes($email),'encrypt');
-    $username_db = cripta(addslashes($username),'encrypt');
-
-    $uploaddir = '../../settings/gestione-utenti/nuovo/logos/';
-    // Cartella temporanea del file da caricare
-    $userfile_tmp = $_FILES['locandina']['tmp_name'];
-    // Nome del file da caricare
-    $userfile_name = $_FILES['locandina']['name'];
-    // Dimensione del file da caricare
-    $userfile_size = $_FILES['locandina']['size'];
-    // Estensione del file da caricare
-    $userfile_extension = strtolower(pathinfo($userfile_name,PATHINFO_EXTENSION));
-
-    // Flag per controllare se e' tutto aposto o se l'utente ha commesso degli errori
-    $isCorrect = false;
-
-    // Cambio il nome del file per evitare che ci siano 2 o + loghi con lo stesso nome
-    $userfile_name = "logo_".date("hisdmY", time()).".".$userfile_extension;
-
-    $logo = cripta("logos/".$userfile_name, "encrypt");
-    
-    // Verifico se il file ha il formato corretto in base all'estensione
-    $filetypes = array("png", "gif", "jpg", "jpeg");
-    if ($userfile_extension == "")
-    {
-        echo "<style>#no_logo {display: block !important;}</style>";
-    } elseif (!in_array($userfile_extension, $filetypes))
-    {
-        echo "<style>#wrong_extension {display: block !important;}</style>";
-    } else {
-        $isCorrect = true;
-    }
-
-    // Controllo che le 2 password inserite corrispondano
-    if ($psw != $psw2) {
-        echo "<style>#psw2_err {display: block !important;}</style>";
-        $isCorrect = false;
-    } else {
-        $isCorrect = true;
-        // Cripto la password
-        $psw = password_hash($password, PASSWORD_BCRYPT);
-    }
-
-    // Controllo che l'email sia scritta con un formato valido
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-        echo "<style>#email_err {display: block !important;}</style>";
-        $isCorrect = false;
-    } else {
-        $isCorrect = true;
-    }
-
-    // Se e' tutto ok
-    if ($isCorrect) {
-        $sql = "INSERT INTO users (nome,cognome,ao,username,password,email,nome_societa,logo,last_access) VALUES ('$nome_db', '$cognome_db','$ao_db','$username_db','$psw','$email_db','$associazione_db','$logo','')";
-        if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
-            if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
-                echo "<h1>Registrazione alla piattaforma avvenuta correttamente!</h1><p>Usa le credenziali inserite prima (username e password) per accedere.</p>";
-            }
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -102,7 +25,7 @@ if (isset($_POST['submit'])) {
             * {font-family: sans-serif;}
             html, body {background: white;}
             input {width: 100%;}
-            .input-container {margin-top: 25px;}
+            .input-container, .drop-zone {margin-top: 25px;}
 
             select {width: 100%; height: 48px; border-radius: 4px; border: 1px solid #c0c0c0; padding-left: 16px; font-size: 14px;}
             option {font-size: 14px; padding: 8px;}
@@ -208,6 +131,86 @@ if (isset($_POST['submit'])) {
 			color: #999;
 		}
         </style>
+        <?php
+        if (isset($_POST['submit'])) {
+            $associazione = addslashes($_POST['nome_associazione']);
+            $nome = addslashes($_POST['nome']);
+            $cognome = addslashes($_POST['cognome']);
+            $ao = addslashes($_POST['ao']);
+            $email = addslashes($_POST['email']);
+            $username = addslashes($_POST['username']);
+            $psw = $_POST['psw'];
+            $psw2 = $_POST['psw2'];
+
+            $uploaddir = '../../settings/gestione-utenti/nuovo/logos/';
+            // Cartella temporanea del file da caricare
+            $userfile_tmp = $_FILES['locandina']['tmp_name'];
+            // Nome del file da caricare
+            $userfile_name = $_FILES['locandina']['name'];
+            // Dimensione del file da caricare
+            $userfile_size = $_FILES['locandina']['size'];
+            // Estensione del file da caricare
+            $userfile_extension = strtolower(pathinfo($userfile_name,PATHINFO_EXTENSION));
+
+            // Flag per controllare se e' tutto aposto o se l'utente ha commesso degli errori
+            $isCorrect = false;
+
+            // Cambio il nome del file per evitare che ci siano 2 o + loghi con lo stesso nome
+            $userfile_name = "logo_".date("hisdmY", time()).".".$userfile_extension;
+
+            $logo = cripta("logos/".$userfile_name, "encrypt");
+            
+            // Verifico se il file ha il formato corretto in base all'estensione
+            $filetypes = array("png", "gif", "jpg", "jpeg");
+            if ($userfile_extension == "")
+            {
+                echo "<style>#no_logo {display: block !important;}</style>";
+            } elseif (!in_array($userfile_extension, $filetypes))
+            {
+                echo "<style>#wrong_extension {display: block !important;}</style>";
+            } else {
+                $isCorrect = true;
+            }
+
+            // Controllo che le 2 password inserite corrispondano
+            if ($psw != $psw2) {
+                echo "<style>#psw2_err {display: block !important;}</style>";
+                $isCorrect = false;
+            } else {
+                $isCorrect = true;
+                // Cripto la password
+                $psw = password_hash($psw, PASSWORD_BCRYPT);
+            }
+
+            // Controllo che l'email sia scritta con un formato valido
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+                echo "<style>#email_err {display: block !important;}</style>";
+                $isCorrect = false;
+            } else {
+                $isCorrect = true;
+            }
+
+            // Se e' tutto ok
+            if ($isCorrect) {
+
+                $associazione_db = cripta(addslashes($associazione),'encrypt');
+                $nome_db = cripta(addslashes($nome),'encrypt');
+                $cognome_db = cripta(addslashes($cognome),'encrypt');
+                $ao_db = cripta(addslashes($ao),'encrypt');
+                $email_db = cripta(addslashes($email),'encrypt');
+                $username_db = cripta(addslashes($username),'encrypt');
+
+                $sql = "INSERT INTO users (nome,cognome,ao,username,password,email,nome_societa,logo,last_access) VALUES ('$nome_db', '$cognome_db','$ao_db','$username_db','$psw','$email_db','$associazione_db','$logo','')";
+                
+                if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
+                    if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
+                        echo "</head><body style='padding: 25px;'><h1>Registrazione alla piattaforma avvenuta correttamente!</h1><p>Usa le credenziali inserite prima (username e password) per <a href='../' style='color: #0071e6; text-decoration:underline;'>accedere</a>.</p></body></html>";
+                        exit;
+                    }
+                }
+            }
+        }
+        ?>
     </head>
     <body>
         <form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" autocomplete="off" class="form">
@@ -345,10 +348,37 @@ if (isset($_POST['submit'])) {
             <p class="error" id="no_logo">Non &egrave; stato caricato nessun logo!</p>
             <p class="error" id="wrong_extension">I file di estensione <b>.<?php echo $userfile_extension; ?></b> non sono ammessi.</p>
 
+            <input type="checkbox" name="app" id="app" style="width: 15px; height: 15px; margin-top: 30px;" oninput="registraAPP()">
+            <label for="app">Voglio registrare la mia associazione anche nell'app per dispositivi Android.</label>
+
             <p style="color: red; font-weight: bold;">* Campi obbligatori</p>
             <button type="submit" name="submit" id="submit">Registrati</button>
         </form>
+
+        <!-- Form di registrazione associazione nell'app -->
+        <div id="registerForm" style="display: none; background-color: #fff; width: 50%; min-width: 600px; height: 480px; position: fixed; top: 25%; bottom: 25%; left: 25%; right: 25%; z-index: 7; border-radius: 15px; box-shadow: 0 0 15px #333;">
+            <iframe style="width: 100%; height: 100%;" frameborder="0" marginheight="0" marginwidth="0" id="registerFrame">Caricamento…</iframe>
+        </div>
+        <div onclick="closeRegister()" id="background_div" style="display: none; width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: 6; background: rgba(0, 0, 0, 0.5);"></div>
+
         <script>
+        // Registrare l'associazione anche nell'app
+        function registraAPP() {
+            var registerForm = document.getElementById("registerForm");
+            var registerDiv = document.getElementById("background_div");
+            registerForm.style.display = "block";
+            registerDiv.style.display = "block";
+            document.getElementById("registerFrame").setAttribute("src", "https://docs.google.com/forms/d/e/1FAIpQLSfNiRvbThyuhli4xCuTLLYd4EvWQKTaIO8HdS39caa_4_Jmow/viewform?embedded=true");
+        }
+        
+        function closeRegister() {
+            var registerForm = document.getElementById("registerForm");
+            var registerDiv = document.getElementById("background_div");
+            registerForm.style.display = "none";
+            registerDiv.style.display = "none";
+        }
+
+        // Gestire i campi di testo
         function manageTextInputStyle(id) {
             const input = document.getElementById(id);
             input.setAttribute('value', input.value);
