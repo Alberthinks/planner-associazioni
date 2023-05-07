@@ -126,7 +126,9 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
 
                     if (mysqli_query($conn,"DELETE FROM planner WHERE id = '$del_id2'")or die(mysqli_error($conn))) {
                         if($rressultt = mysqli_query($myconn,$mysql) or die (mysqli_error($myconn))) {
-                            unlink("../evento/locandine/$filenameDelete");
+                            if ($filenameDelete != "locandina_default.png") {
+                                unlink("../evento/locandine/$filenameDelete");
+                            }
                             echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
                         }
                     }
