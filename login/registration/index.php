@@ -1,17 +1,30 @@
 <?php
 session_start();
 include "../../default.php";
+include '../../config.php';
+
+$db = 'users';
+$conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
 if (isset($_POST['submit'])) {
-    $associazione = $_POST['nome_associazione'];
-    $nome = $_POST['nome'];
-    $cognome = $_POST['cognome'];
-    $ao = $_POST['ao'];
-    $email = $_POST['email'];
-    $username = $_POST['username'];
+    $associazione = addslashes($_POST['nome_associazione']);
+    $nome = addslashes($_POST['nome']);
+    $cognome = addslashes($_POST['cognome']);
+    $ao = addslashes($_POST['ao']);
+    $email = addslashes($_POST['email']);
+    $username = addslashes($_POST['username']);
     $psw = $_POST['psw'];
     $psw2 = $_POST['psw2'];
 
+    
+    $associazione_db = cripta(addslashes($associazione),'encrypt');
+    $nome_db = cripta(addslashes($nome),'encrypt');
+    $cognome_db = cripta(addslashes($cognome),'encrypt');
+    $ao_db = cripta(addslashes($ao),'encrypt');
+    $email_db = cripta(addslashes($email),'encrypt');
+    $username_db = cripta(addslashes($username),'encrypt');
+
+    $uploaddir = '../../settings/gestione-utenti/nuovo/logos/';
     // Cartella temporanea del file da caricare
     $userfile_tmp = $_FILES['locandina']['tmp_name'];
     // Nome del file da caricare
@@ -21,12 +34,52 @@ if (isset($_POST['submit'])) {
     // Estensione del file da caricare
     $userfile_extension = strtolower(pathinfo($userfile_name,PATHINFO_EXTENSION));
 
+    // Flag per controllare se e' tutto aposto o se l'utente ha commesso degli errori
+    $isCorrect = false;
+
+    // Cambio il nome del file per evitare che ci siano 2 o + loghi con lo stesso nome
+    $userfile_name = "logo_".date("hisdmY", time()).".".$userfile_extension;
+
+    $logo = cripta("logos/".$userfile_name, "encrypt");
+    
     // Verifico se il file ha il formato corretto in base all'estensione
     $filetypes = array("png", "gif", "jpg", "jpeg");
-    if (!in_array($userfile_extension, $filetypes))
+    if ($userfile_extension == "")
     {
-        echo "I file di estensione <b>.".$userfile_extension."</b> non sono ammessi.";
-        exit;
+        echo "<style>#no_logo {display: block !important;}</style>";
+    } elseif (!in_array($userfile_extension, $filetypes))
+    {
+        echo "<style>#wrong_extension {display: block !important;}</style>";
+    } else {
+        $isCorrect = true;
+    }
+
+    // Controllo che le 2 password inserite corrispondano
+    if ($psw != $psw2) {
+        echo "<style>#psw2_err {display: block !important;}</style>";
+        $isCorrect = false;
+    } else {
+        $isCorrect = true;
+        // Cripto la password
+        $psw = password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    // Controllo che l'email sia scritta con un formato valido
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+        echo "<style>#email_err {display: block !important;}</style>";
+        $isCorrect = false;
+    } else {
+        $isCorrect = true;
+    }
+
+    // Se e' tutto ok
+    if ($isCorrect) {
+        $sql = "INSERT INTO users (nome,cognome,ao,username,password,email,nome_societa,logo,last_access) VALUES ('$nome_db', '$cognome_db','$ao_db','$username_db','$psw','$email_db','$associazione_db','$logo','')";
+        if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
+            if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
+                echo "<h1>Registrazione alla piattaforma avvenuta correttamente!</h1><p>Usa le credenziali inserite prima (username e password) per accedere.</p>";
+            }
+        }
     }
 }
 ?>
@@ -49,7 +102,12 @@ if (isset($_POST['submit'])) {
             * {font-family: sans-serif;}
             html, body {background: white;}
             input {width: 100%;}
-            .input-container {margin-bottom: 25px;}
+            .input-container {margin-top: 25px;}
+
+            select {width: 100%; height: 48px; border-radius: 4px; border: 1px solid #c0c0c0; padding-left: 16px; font-size: 14px;}
+            option {font-size: 14px; padding: 8px;}
+
+            .error {color: red; font-weight: bold; display: none;}
 
             /* Ripple button */
             button {
@@ -160,7 +218,7 @@ if (isset($_POST['submit'])) {
                     type="text"
                     id="nome_associazione"
                     name="nome_associazione"
-                    value=""
+                    value="<?php echo $associazione; ?>"
                     autofocus
                     required
                     aria-labelledby="label-nome_associazione"
@@ -177,7 +235,7 @@ if (isset($_POST['submit'])) {
                     type="text"
                     id="nome"
                     name="nome"
-                    value=""
+                    value="<?php echo $nome; ?>"
                     required
                     aria-labelledby="label-nome"
                     oninput="manageTextInputStyle('nome')"
@@ -193,7 +251,7 @@ if (isset($_POST['submit'])) {
                     type="text"
                     id="cognome"
                     name="cognome"
-                    value=""
+                    value="<?php echo $cognome; ?>"
                     required
                     aria-labelledby="label-cognome"
                     oninput="manageTextInputStyle('cognome')"
@@ -204,19 +262,21 @@ if (isset($_POST['submit'])) {
                 </label>
             </div>
             <!-- Sesso referente associazione -->
-            <select name="ao" required>
-                <option value="" selected disabled><span style="color: red; font-weight:bold;">*</span> Scegli</option>
-                <option value="o">Maschio</option>
-                <option value="a">Femmina</option>
-                <option value="ə">Altro</option>
-            </select>
+            <div class="input-container">
+                <select name="ao" required>
+                    <option value="" selected disabled><span style="color: red; font-weight:bold;">*</span> Scegli</option>
+                    <option value="o">Maschio</option>
+                    <option value="a">Femmina</option>
+                    <option value="ə">Altro</option>
+                </select>
+            </div>
             <!-- Email referente associazione -->
             <div class="input-container">
                 <input
-                    type="mail"
+                    type="text"
                     id="email"
                     name="email"
-                    value=""
+                    value="<?php echo $email; ?>"
                     required
                     aria-labelledby="label-email"
                     oninput="manageTextInputStyle('email')"
@@ -226,13 +286,14 @@ if (isset($_POST['submit'])) {
                     <div class="text">Indirizzo email referente associazione <span style="color: red; font-weight:bold;">*</span></div>
                 </label>
             </div>
+            <p class="error" id="email_err">Il formato dell'indirizzo email fornito non &egrave; valido!</p>
             <!-- Username referente associazione -->
             <div class="input-container">
                 <input
                     type="text"
                     id="username"
                     name="username"
-                    value=""
+                    value="<?php echo $username; ?>"
                     required
                     aria-labelledby="label-username"
                     oninput="manageTextInputStyle('username')"
@@ -248,7 +309,7 @@ if (isset($_POST['submit'])) {
                     type="password"
                     id="psw"
                     name="psw"
-                    value=""
+                    value="<?php echo $psw; ?>"
                     required
                     aria-labelledby="label-psw"
                     oninput="manageTextInputStyle('psw')"
@@ -264,7 +325,7 @@ if (isset($_POST['submit'])) {
                     type="password"
                     id="psw2"
                     name="psw2"
-                    value=""
+                    value="<?php echo $psw2; ?>"
                     required
                     aria-labelledby="label-psw2"
                     oninput="manageTextInputStyle('psw2')"
@@ -274,12 +335,15 @@ if (isset($_POST['submit'])) {
                     <div class="text">Ripeti password <span style="color: red; font-weight:bold;">*</span></div>
                 </label>
             </div>
+            <p class="error" id="psw2_err">Le due password non corrispondono!</p>
             <!-- Area di upload della locandina -->
             <div class="drop-zone">
                 <span class="drop-zone__prompt">Trascina qui il logo della tua associazione o clicca per caricarlo <span style="color: red; font-weight:bold;">*</span><br><br>
                 <a class="drop-zone__prompt__accepted_filetype"><b>File accettati:</b> .jpg, .jpeg, .png, .gif</a></span>
                 <input name="locandina" id="selectfile" class="drop-zone__input" type="file" accept=".jpg, .jpeg, .png, .gif">
             </div>
+            <p class="error" id="no_logo">Non &egrave; stato caricato nessun logo!</p>
+            <p class="error" id="wrong_extension">I file di estensione <b>.<?php echo $userfile_extension; ?></b> non sono ammessi.</p>
 
             <p style="color: red; font-weight: bold;">* Campi obbligatori</p>
             <button type="submit" name="submit" id="submit">Registrati</button>

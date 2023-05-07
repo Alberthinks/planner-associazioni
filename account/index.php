@@ -16,8 +16,10 @@ if ($logo == " " || $logo == "") {
 
 if ($ao == "a") {
     $genere = "femmina";
-} else {
+} elseif ($ao == "o") {
     $genere = "maschio";
+} else {
+    $genere = "altro";
 }
 ?>
 <!DOCTYPE html>
