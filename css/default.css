@@ -1,6 +1,7 @@
 @import url('fonts.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
-* {font-family: 'Open Sans', sans-serif; box-sizing: border-box;}
+* {font-family: 'Open Sans', Noto Color Emoji, sans-serif; box-sizing: border-box;}
 
 html, body {
 	padding: 0; 
