@@ -248,7 +248,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             echo "<i class=\"material-icons\">place</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-icons\" style=\"font-size: 16px;\">launch</i></a><br>\n";
                         }
                         
-                        echo "<i class=\"material-icons\">event</i> <b>Tipo:</b> ".$tipo."<br>\n";
+                        echo "<i class=\"material-icons\">event</i> <b>Categoria:</b> ".$tipo."<br>\n";
                         
                         // Ottenere il logo dell'organizzatore
                         $db2 = 'users';
@@ -273,7 +273,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         echo "<div class=\"share\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo."+".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\" style=\"margin-left: 0;\"></a>";
                         echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-facebook-nuovo.svg"></a>';
                         echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
-                        echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
+                        echo '<a target="_blank" title="Condividi tramite e-mail" href="mailto:?subject='.$titolo.'&body='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-circled-envelope-96.png"></a>';
                         echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div>';
 
                         // Locandina dell'evento
@@ -448,7 +448,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     echo "<div class=\"share\"><a title=\"Condividi su WhatsApp\" href=\"https://api.whatsapp.com/send/?text=".$titolo."+".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."%3Fid%3D".$id."\"><img src=\"../img/icons8-whatsapp.svg\" style=\"margin-left: 0;\"></a>";
                     echo '<a target="_blank" title="Condividi su Facebook" href="https://www.facebook.com/sharer/sharer.php?u='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-facebook-nuovo.svg"></a>';
                     echo '<a target="_blank" title="Condividi su Twitter" href="https://twitter.com/intent/tweet?text='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-twitter-cerchiato.svg"></a>';
-                    echo '<a target="_blank" title="Condividi su LinkedIn" href="https://www.linkedin.com/shareArticle?title='.$titolo.'&url='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-linkedin-cerchiato.svg"></a>';
+                    echo '<a target="_blank" title="Condividi tramite e-mail" href="mailto:?subject='.$titolo.'&body='.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'"><img src="../img/icons8-circled-envelope-96.png"></a>';
                     echo '<a title="Copia link" href="javascript:copyUrl(\''.$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"].'%3Fid%3D'.$id.'\')"><img src="../img/icons8-link-48.png"></a></div>';
 
                     // Locandina dell'evento
@@ -488,7 +488,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         echo '<a target="_blank" href="https://icons8.com/icon/16713/whatsapp">WhatsApp</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
         echo '<a target="_blank" href="https://icons8.com/icon/114450/twitter-cerchiato">Twitter cerchiato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
         echo '<a target="_blank" href="https://icons8.com/icon/uLWV5A9vXIPu/facebook-nuovo">Facebook Nuovo</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
-        echo '<a target="_blank" href="https://icons8.com/icon/114445/linkedin-cerchiato">LinkedIn cerchiato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
+        echo '<a target="_blank" href="https://icons8.com/icon/35084/circled-envelope">Circled Envelope</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br>';
         echo '<a target="_blank" href="https://icons8.com/icon/kktvCbkDLbNb/link">Link</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>';
         echo '<!--Foto (sfondo) di <a href="https://unsplash.com/@antenna?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Antenna</a> su <a href="https://unsplash.com/it/s/foto/evento-sportivo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>-->';
         echo '</div>';
