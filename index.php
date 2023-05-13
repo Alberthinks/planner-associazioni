@@ -254,11 +254,11 @@ if ($_GET['appView'] == "true") {
                                             }
                                         
                                             $contenuto = "<div class=\"nota\">
-                                                            <a href=\"evento/?id=$id\" title=\"Maggiori informazioni\">
-                                                            <p class=\"title\">".$titolo."</p>
+                                                            <a href=\"evento/?id=$id\">
+                                                            <p class=\"title\" title=\"".$titolo."\">".$titolo."</p>
                                                             <p class=\"info_nota\">
-                                                            <i class=\"material-icons\">schedule</i>".$ora."<br>
-                                                            <i class=\"material-icons\">place</i>".$luogo."
+                                                            <span title=\"".$ora."\"><i class=\"material-icons\">schedule</i>".$ora."</span><br>
+                                                            <span title=\"".$luogo."\"><i class=\"material-icons\">place</i>".$luogo."</span>
                                                             </p>".$bottone_prenotazione."
                                                             </a>
                                                             </div>";

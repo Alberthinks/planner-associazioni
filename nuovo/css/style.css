@@ -84,7 +84,7 @@ input[type=submit], input[type=reset] {
 	color: #ffffff;
 }
 
-.canvaBtn:hover img {filter: brightness(156999999999999990000%);}
+.canvaBtn:hover img {filter: brightness(0%) invert(100%);}
 
 #canvaHelp {
 	width: 100%;
