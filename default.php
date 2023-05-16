@@ -1,7 +1,7 @@
 <?php
 $default_servername = "localhost";
-$default_username = "root";
-$default_password = "mysql";
+$default_username = "lele_superuser";
+$default_password = "9kQuc(F[D3G0!c9leeeeE41gr4r4gf5df55we38";
 $default_dbname = "accesses";
 
 // Nasconde gli errori agli utenti

@@ -31,8 +31,8 @@
                         'db_engine' => 'mysql',
                         'db_host' => 'localhost',
                         'db_name' => 'users',
-                        'db_user' => 'root',
-                        'db_password' => 'mysql',
+                        'db_user' => 'lele_superuser',
+                        'db_password' => '9kQuc(F[D3G0!c9leeeeE41gr4r4gf5df55we38',
                     ];
                     
                     $db_config = $config['db_engine'] . ":host=".$config['db_host'] . ";dbname=" . $config['db_name'];

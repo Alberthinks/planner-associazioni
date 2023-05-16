@@ -1,7 +1,6 @@
 <title>Passaggio 4 - Inserimento Amministratore</title>
 <?php
 include 'config.php';
-include '../default.php';
 
 // Check connection
 if ($conn->connect_error) {

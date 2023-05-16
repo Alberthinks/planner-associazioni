@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "mysql";
+$username = "lele_superuser";
+$password = "9kQuc(F[D3G0!c9leeeeE41gr4r4gf5df55we38";
 $dbname = "planner";
 
 // Create connection

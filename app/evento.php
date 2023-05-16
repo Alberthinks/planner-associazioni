@@ -198,7 +198,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         }
 
                         // Descrizione dell'evento
-                        echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione\" style=\"height: auto;\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn\">Espandi</a></p>\n";
+                        echo "<div id=\"descrizioneBtn\"><div id=\"dots\" style=\"float: right; position: relative; right: 15px; background: #ffffcc; padding-left: 4px;\">...</div><p class=\"descrizione\" id=\"descrizione\" style=\"height: auto;\"><b>".$tipo."</b>".$descrizione."</p></div>\n";
                         ?>
                         <script type="text/javascript">  
                             $(document).ready(function(){
@@ -216,12 +216,10 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                                     $("#descrizione").css("height","35px");
                                     $("#dots").show();
                                     $("#descrizione").css("text-overflow","ellipsis");
-                                    $("#descrizioneBtn").text("Espandi");
                                 } else {
                                     $("#descrizione").css("height","auto");
                                     $("#dots").hide();
                                     $("#descrizione").css("text-overflow","clip");
-                                    $("#descrizioneBtn").text("Comprimi");
                                 }
                             });
                         </script> 
@@ -366,14 +364,14 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     }
 
                     // Descrizione dell'evento
-                    echo "<span id=\"dots".$id."\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn".$id."\">Espandi</a></p>\n";
+                    echo "<div id=\"descrizioneBtn".$id."\"><span id=\"dots".$id."\" style=\"float: right; position: relative; right: 15px; background: #ffffcc; padding-left: 4px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p></div>\n";
                     ?>
                     <script type="text/javascript">  
                         $(document).ready(function(){
                             if ($("#descrizione<?php echo $id; ?>").height() > 50) {
                                 $("#descrizioneBtn<?php echo $id; ?>").show();
                                 $("#dots<?php echo $id; ?>").show();
-                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                                $("#descrizione<?php echo $id; ?>").css("height","32px");
                             } else {
                                 $("#descrizioneBtn<?php echo $id; ?>").hide();
                                 $("#dots<?php echo $id; ?>").hide();
@@ -381,15 +379,13 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         });
                         $("#descrizioneBtn<?php echo $id; ?>").click(function(){
                             if ($("#descrizione<?php echo $id; ?>").height() > 35) {
-                                $("#descrizione<?php echo $id; ?>").css("height","35px");
+                                $("#descrizione<?php echo $id; ?>").css("height","32px");
                                 $("#dots<?php echo $id; ?>").show();
                                 $("#descrizione<?php echo $id; ?>").css("text-overflow","ellipsis");
-                                $("#descrizioneBtn<?php echo $id; ?>").text("Espandi");
                             } else {
                                 $("#descrizione<?php echo $id; ?>").css("height","auto");
                                 $("#dots<?php echo $id; ?>").hide();
                                 $("#descrizione<?php echo $id; ?>").css("text-overflow","clip");
-                                $("#descrizioneBtn<?php echo $id; ?>").text("Comprimi");
                             }
                         });
                     </script> 

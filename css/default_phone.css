@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Permanent+Marker&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
-* {font-family: 'Open Sans', sans-serif; box-sizing: border-box;}
+* {font-family: 'Open Sans', sans-serif; box-sizing: border-box; -webkit-hyphens: auto; -ms-hyphens: auto; hyphens: auto;}
 
 head, body {width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;}
 
@@ -148,12 +148,15 @@ evento.php
 }
 
 .titolo, .descrizione {
-  word-break: break-all;
-  overflow: hidden;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    overflow: hidden;
 }
 
 .informazioni {
     width: 95%;
+    max-width: 600px;
     min-width: 250px;
     padding: 20px 30px 30px 30px;
     margin-top: 90px;
@@ -169,6 +172,9 @@ evento.php
     -webkit-transform: rotate(-1.5deg);
     -o-transform: rotate(-1.5deg);
     -moz-transform:rotate(-1.5deg);
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
   }
 
   .informazioni b, .informazioni p, .informazioni a {

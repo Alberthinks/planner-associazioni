@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../default.php";
+include '../config.php';
 
 $username = $_SESSION['session_user_lele_planner_0425'];
 $nome = $_SESSION['session_nome_lele_planner_0425'];
@@ -8,6 +9,10 @@ $cognome = $_SESSION['session_cognome_lele_planner_0425'];
 $ao = $_SESSION['session_ao_lele_planner_0425'];
 $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
 $logo = $_SESSION['session_logo_lele_planner_0425'];
+
+if ($username == "lele_administrator_admin") {
+    $username = "admin";
+}
 
 
 if ($logo == " " || $logo == "") {
@@ -179,16 +184,18 @@ if ($ao == "a") {
             <?php
             if (isset($_POST['submit']) && $_POST['submit']=="Cambia password")
             {
-                include '../config.php';
                 $username = cripta($username, "encrypt");
-                $db = 'users';
-                $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
+                $conn = mysqli_connect($host,$user,$pass, 'users') or die (mysqli_error());
                 $query = mysqli_query($conn,"SELECT password FROM users WHERE username = '$username'") or die (mysqli_error($conn));
                 $fetch = mysqli_fetch_array($query);
-                $password = stripslashes($fetch['password']);
+                // Password vecchia salvata nel database
+                $password = $fetch['password'];
+                // Password nuova
                 $password1 = addslashes($_POST['password1']);
+                // Password nuova ripetuta
                 $password2 = addslashes($_POST['password2']);
-                $check = stripslashes($_POST['check']);
+                // Password vecchia
+                $check = $_POST['check'];
                 $utilizzatore_content = stripslashes($_POST['utilizzatore_content']);
                 
                 if ($user == "admin") {
@@ -197,11 +204,11 @@ if ($ao == "a") {
                     $utilizzatore = $user;
                 }
                 
-                if (password_verify($check, $password) === true && $password1 == $password2) {
+                if (password_verify($check, $password) && $password1 == $password2) {
                     $new_password = password_hash($password1, PASSWORD_BCRYPT);
                     $sql = "UPDATE users SET password='$new_password' WHERE username = '$username'";
 
-                    $myconn = mysqli_connect('localhost','root','mysql', 'accesses') or die (mysqli_error());
+                    $myconn = mysqli_connect($host,$user,$pass, 'accesses') or die (mysqli_error());
                     $timestamp = cripta(date('d/m/Y H:i:s', strtotime("now")), "encrypt");
                     $action = cripta("Password modificata correttamente", "encrypt");
                     $ip = cripta($_SERVER['REMOTE_ADDR'], "encrypt");
@@ -218,7 +225,7 @@ if ($ao == "a") {
                     }
                 } else if ($password1 != $password2) {
                     echo "Le due nuove password non corrispondono!";
-                } else if ($password != $password_hash) {
+                } else if (!password_verify($check, $password)) {
                     echo "La password vecchia &egrave; errata!";
                 } else {
                     echo "Errore nella procedura";
