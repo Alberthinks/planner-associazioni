@@ -215,9 +215,6 @@ if ($_GET['appView'] == "true") {
                             $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             
                             $result = mysqli_query($conn,"SELECT data FROM planner") or die (mysqli_error($conn));
-                            
-                            // Elimino record salvati da + di 2 anni
-                            $deleteSQL = mysqli_query($conn,"DELETE from planner WHERE validity <= CURDATE() - 20000") or die (mysqli_error($conn));
 
                             if(mysqli_num_rows($result) > 0)
                             {
@@ -243,8 +240,21 @@ if ($_GET['appView'] == "true") {
                                                 $ora = stripslashes($fetch['ora']);
                                                 $luogo = stripslashes($fetch['luogo']);
                                                 $type = stripslashes($fetch['tipo']);
+                                                $filenameDelete = stripslashes($fetch['link_foto_video']);
                                                 $link_prenotazione = stripslashes($fetch['link_prenotazione']);
+                                                $validity = stripslashes($fetch['validity']);
                                             }
+
+                                            // Elimino le locandine degli eventi salvati da 2 o piu' anni
+                                            echo "<script>alert('".$validity."');</script>";
+                                            if ($validity <= date('Ymd') - 20000) {
+                                                echo "<script>alert('".$filenameDelete."');</script>";
+                                                unlink("evento/locandine/$filenameDelete");
+                                            }
+                            
+                                            // Elimino record salvati da + di 2 anni
+                                            $deleteSQL = mysqli_query($conn,"DELETE from planner WHERE validity <= CURDATE() - 20000") or die (mysqli_error($conn));
+
 
                                             if ($link_prenotazione != null || $link_prenotazione != "")
                                             {
@@ -309,7 +319,7 @@ if ($_GET['appView'] == "true") {
                 }
                 
                 // Richiamo la funzione del calendario
-                ShowCalendar(date("m"),date("Y")); 
+                ShowCalendar(date("m"),date("Y"));
                 ?>
             </div>
         </center>
