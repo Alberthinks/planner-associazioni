@@ -246,9 +246,7 @@ if ($_GET['appView'] == "true") {
                                             }
 
                                             // Elimino le locandine degli eventi salvati da 2 o piu' anni
-                                            echo "<script>alert('".$validity."');</script>";
                                             if ($validity <= date('Ymd') - 20000) {
-                                                echo "<script>alert('".$filenameDelete."');</script>";
                                                 unlink("evento/locandine/$filenameDelete");
                                             }
                             
