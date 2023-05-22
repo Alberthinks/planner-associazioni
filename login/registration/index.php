@@ -13,6 +13,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Registrazione | <?php echo $nome_app; ?></title>
+        <meta name="robots" content="noindex, nofollow" />
         <!-- Icone -->
         <link rel="apple-touch-icon" sizes="180x180" href="../../img/icon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="../../img/icon/favicon-32x32.png">
@@ -267,7 +268,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
             <!-- Sesso referente associazione -->
             <div class="input-container">
                 <select name="ao" required>
-                    <option value="" selected disabled><span style="color: red; font-weight:bold;">*</span> Scegli</option>
+                    <option value="" selected disabled><span style="color: red; font-weight:bold;">*</span> Sesso</option>
                     <option value="o">Maschio</option>
                     <option value="a">Femmina</option>
                     <option value="ə">Altro</option>
@@ -394,7 +395,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
             circle.style.width = circle.style.height = `${diameter}px`;
             circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
-            circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+            circle.style.top = `${event.clientY - button.offsetTop - radius + 200}px`;
             circle.classList.add("ripple");
 
             const ripple = button.getElementsByClassName("ripple")[0];

@@ -23,7 +23,7 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
         <link rel="stylesheet" href="../css/default_phone.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0">
     </head>
-    <body style="overflow: hidden;">
+    <body style="overflow-y: auto;">
         <center>
             <div class="tabel">
                 <?php
