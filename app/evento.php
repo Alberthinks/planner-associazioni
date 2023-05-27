@@ -8,11 +8,15 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
 
 $id_evento = $_GET['id'];
 
-// Url condiviso sui social network per vedere l'evento dal planner
-$url = "http://192.168.1.7".$_SERVER['PHP_SELF']."?id=".$id_evento;
-
 $str_data = $_GET['day'];
 $data = date("d/m/Y", $str_data);
+
+// Url condiviso sui social network per vedere l'evento dal planner
+if (isset($id_evento) && is_numeric($id_evento)) {
+    $url = "http://192.168.1.7".$_SERVER['PHP_SELF']."?id=".$id_evento;
+} else {
+    $url = "http://192.168.1.7".$_SERVER['PHP_SELF']."?id=".$str_data;
+}
 
 include '../config.php';
 $db = 'planner';
