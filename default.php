@@ -137,6 +137,7 @@ function getGoogleMapsLink($luogo, $materialSimbols) {
     }
 
 
+    // Nella versione per l'app Android uso icone Material Symbols, mentre per quella web uso icone Material Icons
     if ($materialSimbols == true) {
         if ($plusCode == "2896%2b234 Castelmassa, Provincia di Rovigo") {
             return "<i class=\"material-symbols-outlined\">place</i> <b>Luogo:</b> ".$luogo."<br>\n";
