@@ -143,71 +143,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                             $link_foto_video = "locandina_default.png";
                         }
 
-                        switch ($luogo) {
-                            case "Area di sosta per camper - via Argine Po":
-                                $plusCode = "2876%2BH9 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case "Black Coffee Arena (parcheggio bar Nerocaffè)":
-                                $plusCode = "2887%2BR4 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Biblioteca comunale "E. Fornasari"':
-                                $plusCode = "2886%2b66 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Centro sociale':
-                                $plusCode = "2878%2BG2 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Crispo':
-                                $plusCode = "28CC%2BG23 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Centro giovanile pastorale di Castelmassa':
-                                $plusCode = "2885%2BXR4 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Kayak Club':
-                                $plusCode = "2884%2BM3V Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Mercato coperto':
-                                $plusCode = "2886%2B3V Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Piazza della Libertà':
-                                $plusCode = "2885%2BJ95 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Piazza della Repubblica':
-                                $plusCode = "2897%2B6PC Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Piazzetta A. Ragazzi':
-                                $plusCode = "2886%2BJ7G Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Palestra comunale di Castelmassa':
-                                $plusCode = "2895%2B772 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Piscine di Castelmassa':
-                                $plusCode = "28C3%2BMW Masina, Provincia di Rovigo";
-                                break;
-                            case 'Sala polivalente':
-                                $plusCode = "2895%2B3XV Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Scuola primaria di I grado "E. Panzacchi"':
-                                $plusCode = "2895%2B54 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Scuola secondaria di I grado "G. Sani"':
-                                $plusCode = "2897%2BG9 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Scuola secondaria di II grado "B. Munari"':
-                                $plusCode = "2895%2BG4 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Sede A.V.P.':
-                                $plusCode = "2894%2BV8 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Sede BIG RIVER MOTOCLUB':
-                                $plusCode = "28C6%2BM2 Castelmassa, Provincia di Rovigo";
-                                break;
-                            case 'Teatro Cotogni':
-                                $plusCode = "2886%2BR5 Castelmassa, Provincia di Rovigo";
-                                break;
-                            default:
-                                $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
-                        }
-
                         echo "<div class=\"informazioni\">";
                         echo "<h2 class=\"titolo\">".$titolo."</h2>";
                         echo "<span id=\"dots\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione\">".$descrizione."</p><p><a id=\"descrizioneBtn\" href=\"#\">Espandi</a></p>\n";
@@ -242,11 +177,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         echo "<i class=\"material-icons\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
                         echo "<i class=\"material-icons\">timelapse</i> <b>Durata:</b> ".$durata."<br>\n";
 
-                        if ($plusCode == "2896%2b234 Castelmassa, Provincia di Rovigo") {
-                            echo "<i class=\"material-icons\">place</i> <b>Luogo:</b> ".$luogo."<br>\n";
-                        } else {
-                            echo "<i class=\"material-icons\">place</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-icons\" style=\"font-size: 16px;\">launch</i></a><br>\n";
-                        }
+                        echo getGoogleMapsLink($luogo, false);
                         
                         echo "<i class=\"material-icons\">event</i> <b>Categoria:</b> ".$tipo."<br>\n";
                         
@@ -318,70 +249,6 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     $link_foto_video = stripslashes($fetch['link_foto_video']);
                     $data_modifica = stripslashes($fetch['data_modifica']);
 
-                    switch ($luogo) {
-                        case "Area di sosta per camper - via Argine Po":
-                            $plusCode = "2876%2BH9 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case "Black Coffee Arena (parcheggio bar Nerocaffè)":
-                            $plusCode = "2887%2BR4 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Biblioteca comunale "E. Fornasari"':
-                            $plusCode = "2886%2b66 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Centro sociale':
-                            $plusCode = "2878%2BG2 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Crispo':
-                            $plusCode = "28CC%2BG23 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Centro giovanile pastorale di Castelmassa':
-                            $plusCode = "2885%2BXR4 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Kayak Club':
-                            $plusCode = "2884%2BM3V Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Mercato coperto':
-                            $plusCode = "2886%2B3V Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Piazza della Libertà':
-                            $plusCode = "2885%2BJ95 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Piazza della Repubblica':
-                            $plusCode = "2897%2B6PC Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Piazzetta A. Ragazzi':
-                            $plusCode = "2886%2BJ7G Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Palestra comunale di Castelmassa':
-                            $plusCode = "2895%2B772 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Piscine di Castelmassa':
-                            $plusCode = "28C3%2BMW Masina, Provincia di Rovigo";
-                            break;
-                        case 'Sala polivalente':
-                            $plusCode = "2895%2B3XV Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Scuola primaria di I grado "E. Panzacchi"':
-                            $plusCode = "2895%2B54 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Scuola secondaria di I grado "G. Sani"':
-                            $plusCode = "2897%2BG9 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Scuola secondaria di II grado "B. Munari"':
-                            $plusCode = "2895%2BG4 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Sede A.V.P.':
-                            $plusCode = "2894%2BV8 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Sede BIG RIVER MOTOCLUB':
-                            $plusCode = "28C6%2BM2 Castelmassa, Provincia di Rovigo";
-                            break;
-                        case 'Teatro Cotogni':
-                            $plusCode = "2886%2BR5 Castelmassa, Provincia di Rovigo";
-                            break;
-                        default:
-                            $plusCode = "2896%2b234 Castelmassa, Provincia di Rovigo";
-                    }
 
                     echo "<div style='margin-top: 40px; overflow: hidden;'>";
                     echo "<div class=\"informazioni\">";
@@ -389,11 +256,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     echo "<i class=\"material-icons\">schedule</i> <b>Ora di inizio:</b> ".$ora."<br>\n";
                     echo "<i class=\"material-icons\">timelapse</i> <b>Durata:</b> ".$durata."<br>\n";
 
-                    if ($plusCode == "2896%2b234 Castelmassa, Provincia di Rovigo") {
-                        echo "<i class=\"material-icons\">location_on</i> <b>Luogo:</b> ".$luogo."<br>\n";
-                    } else {
-                        echo "<i class=\"material-icons\">location_on</i> <b>Luogo:</b> <a href=\"https://www.google.com/maps/place/".$plusCode."\" target=\"_blank\">".$luogo." <i class=\"material-icons\" style=\"font-size: 16px !important;\">open_in_new</i></a><br>\n";
-                    }
+                    echo getGoogleMapsLink($luogo, false);
                     
                     // Ottenere il logo dell'organizzatore
                     $db2 = 'users';
@@ -407,6 +270,7 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                     }
 
                     // Descrizione dell'evento
+                    //echo "<span id=\"descrizioneBtn".$id."\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn".$id."\" href=\"#\">Espandi</a></p>\n";
                     echo "<span id=\"dots".$id."\" style=\"float: right; position: relative; top: 20px; right: 15px;\">...</span><p class=\"descrizione\" id=\"descrizione".$id."\"><b>".$tipo."</b>".$descrizione."</p><p><a id=\"descrizioneBtn".$id."\" href=\"#\">Espandi</a></p>\n";
                     ?>
                     <script type="text/javascript">  

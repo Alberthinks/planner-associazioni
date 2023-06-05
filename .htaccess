@@ -29,8 +29,8 @@ Allow from all
 Satisfy All
 </Files>
 
-ErrorDocument 404 /planner-main/settings/error/404.html
-ErrorDocument 403 /planner-main/settings/error/403.html
+ErrorDocument 404 /planner-associazioni-main/settings/error/404.html
+ErrorDocument 403 /planner-associazioni-main/settings/error/403.html
 
 <IfModule mod_headers.c>
 Header set X-XSS-Protection "1; mode = block"

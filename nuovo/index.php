@@ -452,7 +452,7 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
         }
 
         /*An array containing all the country names in the world:*/
-        var luoghi = ["Mercato coperto","Centro sociale","Sala polivalente","Piazza della Libertà","Piazza della Repubblica","Crispo","Piazzetta A. Ragazzi","Area di sosta per camper - via Argine Po","Kayak Club","Palestra comunale di Castelmassa","Scuola primaria di I grado \"E. Panzacchi\"","Scuola secondaria di I grado \"G. Sani\"","Centro giovanile pastorale di Castelmassa","Scuola secondaria di II grado \"B. Munari\"","Teatro Cotogni","Sede A.V.P.","Black Coffee Arena (parcheggio bar Nerocaffè)","Piscine di Castelmassa","Sede BIG RIVER MOTOCLUB","Biblioteca comunale \"E. Fornasari\""];
+        var luoghi = ["Mercato coperto","Centro sociale","Sala polivalente","Piazza della Libertà","Piazza della Repubblica","Piazza Giuseppe Garibaldi","Piazza Vittorio Veneto","Crispo","Piazzetta A. Ragazzi","Area di sosta per camper - via Argine Po","Kayak Club","Palestra comunale di Castelmassa","Scuola primaria di I grado \"E. Panzacchi\"","Scuola secondaria di I grado \"G. Sani\"","Centro giovanile pastorale di Castelmassa","Scuola secondaria di II grado \"B. Munari\"","Teatro Cotogni","Sede A.V.P.","Black Coffee Arena (parcheggio bar Nerocaffè)","Piscine di Castelmassa","Sede BIG RIVER MOTOCLUB","Biblioteca comunale \"E. Fornasari\""];
         var tipi = ["Lezione","Spettaccolo","Fiera","Mostra","Incontro informativo","Partita","Festa","Pranzo","Cena","Maratona","Evento sportivo","Riunione","Evento"];
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
@@ -539,7 +539,7 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
         </script>
         <?php
         } else {
-            echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
+            echo "<script type=\"text/javascript\">history.back();</script>";
         }
         ?>
 
