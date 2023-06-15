@@ -20,7 +20,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
     </head>
     <body>
         <?php
-        // Permette l'accesso solo all'amministratore e a chi fa manutenzione
+        // Permette l'accesso solo all'amministratore
         if ($_SESSION['session_user_lele_planner_0425'] == "lele_administrator_admin") {
         ?>
         <!-- Header -->
@@ -40,7 +40,7 @@ $nome = $_SESSION['session_user_lele_planner_0425'];
             <option value="accesso">Accesso all'account</option>
             <option value="disconnessione">Disconnessione dall'account</option>
             <option value="creazione">Creazione evento</option>
-            <option value="modifica">Modifica evento</option>
+            <option value="modifica dell'evento">Modifica evento</option>
             <option value="eliminazione">Eliminazione evento</option>
             <option value="Password modificata correttamente">Modifica password</option>
         </select>

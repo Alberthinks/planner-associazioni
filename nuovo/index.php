@@ -114,13 +114,11 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
 
                 $myconn = mysqli_connect('localhost','root','mysql', 'accesses') or die (mysqli_error());
                 $timestamp = cripta(date('d/m/Y H:i:s', strtotime("now")), "encrypt");
-                $action = cripta("Creazione dell'evento '$titolo' del ".date('d/m/Y', $data)." alle $ora", "encrypt");
                 $ip = cripta($_SERVER['REMOTE_ADDR'], "encrypt");
                 $uname = cripta($username, "encrypt");
                 $name = cripta($nome, "encrypt");
                 $cog = cripta($cognome, "encrypt");
                 $societa = cripta($nome_societa, "encrypt");
-                $mysql = "INSERT INTO accesses (username,nome,cognome,nome_societa,ip,azione,timestamp,validity) VALUES ('$uname', '$name','$cog','$societa','$ip','$action','$timestamp','$dataValidity')";
             
                 
                 if (($_FILES['locandina']['name'] != null) && ($_FILES['locandina']['tmp_name'] != null)) {
@@ -149,6 +147,13 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                     // Controllo se esiste gia' un file con lo stesso nome e se sono in grado di caricare il file corrente
                     if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
                         if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
+                            // Prelevo dal database l'id da registrare nel registro delle attivita'
+                            $equery = mysqli_query($conn,"SELECT * FROM planner WHERE titolo='$titolo' AND organizzatore='$organizzatore' AND data='$data'") or die (mysqli_error($conn));
+                            $row = mysqli_fetch_array($equery);
+                            $accessesID = $row['id'];
+                            $action = cripta("Creazione dell'evento (id:".$accessesID.") '$titolo' del ".date('d/m/Y', $data)." alle $ora", "encrypt");
+                            $mysql = "INSERT INTO accesses (username,nome,cognome,nome_societa,ip,azione,timestamp,validity) VALUES ('$uname', '$name','$cog','$societa','$ip','$action','$timestamp','$dataValidity')";
+
                             if ($rressultt = mysqli_query($myconn,$mysql) or die (mysqli_error($myconn))) {
                                 echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
                             }
@@ -163,6 +168,13 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                     $sql = "INSERT INTO planner (titolo,descrizione,data,ora,durata,organizzatore,luogo,tipo,link_prenotazione,link_foto_video,data_modifica,validity) VALUES ('$titolo', '$descrizione','$data','$ora','$durata','$organizzatore','$luogo','$tipo','$link_prenotazione','locandina_default.png','$data_modifica','$dataValidity')";
 
                     if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
+                        // Prelevo dal database l'id da registrare nel registro delle attivita'
+                        $equery = mysqli_query($conn,"SELECT * FROM planner WHERE titolo='$titolo' AND organizzatore='$organizzatore' AND data='$data'") or die (mysqli_error($conn));
+                        $row = mysqli_fetch_array($equery);
+                        $accessesID = $row['id'];
+                        $action = cripta("Creazione dell'evento (id:".$accessesID.") '$titolo' del ".date('d/m/Y', $data)." alle $ora", "encrypt");
+                        $mysql = "INSERT INTO accesses (username,nome,cognome,nome_societa,ip,azione,timestamp,validity) VALUES ('$uname', '$name','$cog','$societa','$ip','$action','$timestamp','$dataValidity')";
+
                         if ($rressultt = mysqli_query($myconn,$mysql) or die (mysqli_error($myconn))) {
                             echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
                         }
