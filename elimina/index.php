@@ -160,7 +160,7 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                     <b>Tipo evento:</b> <?php echo $tipo; ?>
                 </p>
             </div>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])."?organizzatore=".$organizzatore; ?>">
                 <input type="hidden" value="<?php echo $id; ?>" name="del_id2">
                 <input type="hidden" value="<?php echo $fileName; ?>" name="filenameDelete">
                 <input type="submit" value="Sì" name="si">
