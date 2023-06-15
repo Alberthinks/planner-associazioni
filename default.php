@@ -25,14 +25,14 @@ $maintenance = $default_fetch['maintenance'];
 
 // Controllo sulla validita' della LicenseKey
 if (!isset($licenseKey) || !is_numeric($licenseKey)) {
-    header('Location: /planner-main/settings/error/error.php?status=err5801x24-License-Key');
+    header('Location: /settings/error/error.php?status=err5801x24-License-Key');
 }
 
 // Controllo se la modalita' manutenzione e' attiva o no
 if ($maintenance == "true") {
     // Verifico se l'utente e' il tecnico di manutenzione o l'admin per lasciargli la possibilita' di vedere la piattaforma anche in fase di manutenzione
     if ($_SESSION['session_user_lele_planner_0425'] != "maintenance" && $_SESSION['session_user_lele_planner_0425'] != "lele_administrator_admin") {
-        header('Location: /planner-main/settings/error/error.php?status=err5077x26-Maintenance');
+        header('Location: /settings/error/error.php?status=err5077x26-Maintenance');
     }
     echo "<script>alert('Sei in modalità manutenzione!');</script>";
 }
