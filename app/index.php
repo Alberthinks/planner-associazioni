@@ -141,7 +141,7 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                                     $str_data = $fetch['data'];
                                     if ($str_data == $data)
                                     {
-                                        if ($_GET['plannerID'] != "") {
+                                        if ($plannerID != "" && $plannerID != null) {
                                             $sql = "SELECT * FROM planner WHERE data=$str_data AND organizzatore='$plannerID'";
                                         } else {
                                             $sql = "SELECT * FROM planner WHERE data=$str_data";
