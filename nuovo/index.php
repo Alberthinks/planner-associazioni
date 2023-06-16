@@ -309,9 +309,20 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                             <a class="drop-zone__prompt__accepted_filetype"><b>File accettati:</b> .jpg, .jpeg, .png, .gif, .svg</a></span>
                             <input name="locandina" id="selectfile" class="drop-zone__input" type="file" accept=".jpg, .jpeg, .png, .gif, .svg">
                         </div>
-                        <a onclick="openCanva()" title="Crea una locandina con Canva" class="canvaBtn">Crea una locandina con 
+                        <!-- Pulsante per creare locandina con Canva -->
+                        <a onclick="openCanva()" title="Crea una locandina con Canva" class="canvaBtn" style="position: relative; top: 30px;">Crea una locandina con 
                         <img alt="Canva" src="https://static-cse.canva.com/_next/static/assets/logo_w2000xh641_3b021976d60d0277e95febf805ad9fe8c7d6d54f86969ec03b83299084b7cb93.png" height="16"></a>
                         <div class="material-icons" onclick="openHelp(true)" title="Apri istruzioni" style="cursor: pointer; position: relative; top: 30px; left: 20px;">help_outline</div>
+                        <!-- Area di condivisione social -->
+                        <div style="border: 1px solid #f0f0f0; position: relative; top: 80px; padding-left: 40px; padding-top: 10px; padding-bottom: 50px;">
+                            <p style="margin-bottom: 35px;">Vuoi salvare l'evento anche su altre piattaforme?</p>
+                            <a title="Crea anche un post di Facebook" class="fbBtn" onclick="facebookPost()">
+                                <i class="material-icons" id="materialCheckbox">check_box_outline_blank</i>
+                                Crea anche un post di 
+                                <img alt="Facebook" src="../img/facebook.svg" height="35" style="transform: translate(-8px, 10px);">
+                            </a>
+                            <input type="hidden" name="facebookPost" id="facebookPost" value="">
+                        </div>
                     </div>
                 </div>
                 <p>
@@ -346,6 +357,20 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
         </div>
 
         <script>
+        function facebookPost() {
+            var facebookStatus = document.getElementById("facebookPost");
+            var checkbox = document.getElementById("materialCheckbox");
+            if (facebookStatus.value == "") {
+                checkbox.innerText = "check_box";
+                checkbox.style.color = "#1877F2";
+                facebookStatus.value = "true";
+            } else {
+                checkbox.innerText = "check_box_outline_blank";
+                checkbox.style.color = "#333333";
+                facebookStatus.value = "";
+            }
+        }
+
         function manageTextInputStyle(id) {
             const input = document.getElementById(id);
             input.setAttribute('value', input.value);
