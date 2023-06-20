@@ -334,15 +334,16 @@ if ($_GET['appView'] == "true") {
             <div class="footer-row">
             <div class="footer-col">
                 Realizzato da Albertin Emanuele e Paun Catalin-Adrian per conto di<br>
-                <img alt="Logo I.I.S PRIMO LEVI di Badia Polesine" src="img/logo_primo_levi.png" height="80">
+                <img alt="Logo I.I.S PRIMO LEVI di Badia Polesine" title="I.I.S PRIMO LEVI di Badia Polesine" src="../img/logo_primo_levi.png" height="80">
             </div>
             <div class="footer-col">
-                Progetto "Comunità inclusiva ed accogliente" in collaborazione con <img src="img/logo_uni_pop.png" height="100" alt="Logo dell'Università Popolare del Tempo Libero di Castelmassa, Castelnovo Bariano, Ceneselli, Calto" title="Università Popolare del Tempo Libero di Castelmassa, Castelnovo Bariano, Ceneselli, Calto">
-                <img alt="Logo Comune di Castelmassa" src="img/logo_com_cast.png" height="80">
+                Progetto "Comunità inclusiva ed accogliente" in collaborazione con <img src="../img/logo_uni_pop.png" height="100" alt="Logo dell'Università Popolare del Tempo Libero di Castelmassa, Castelnovo Bariano, Ceneselli, Calto" title="Università Popolare del Tempo Libero di Castelmassa, Castelnovo Bariano, Ceneselli, Calto">
+                <img alt="Logo Comune di Castelmassa" title="Comune di Castelmassa" src="../img/logo_com_cast.png" height="80">
             </div>
             </div>
             <p class="copyright">A. P. Planner - ver. <?php echo $version; ?></p>
         </div>
+        <a href="https://forms.gle/kHUfzDRse281sreo7" target="_blank" style="text-align: left; text-decoration: underline; float: left; margin-left: 40px;">Consigliaci un miglioramento</a>
         </footer>
 
         <script>
