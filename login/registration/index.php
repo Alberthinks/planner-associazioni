@@ -22,6 +22,13 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
         <!-- CSS -->
         <link rel="stylesheet" href="../../css/default.css" type="text/css">
         <link rel="stylesheet" href="../css/style.css" type="text/css">
+        <!-- JavaScript per reCaptcha-->
+        <script src="https://www.google.com/recaptcha/enterprise.js"></script>
+        <script>
+            var verifyCallback = function (response) {
+                //alert(response);
+            };
+        </script>
         <style>
             * {font-family: sans-serif;}
             html, body {background: white;}
@@ -133,13 +140,13 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 		}
         </style>
         <?php
-        if (isset($_POST['submit'])) {
-            $associazione = addslashes($_POST['nome_associazione']);
-            $nome = addslashes($_POST['nome']);
-            $cognome = addslashes($_POST['cognome']);
-            $ao = addslashes($_POST['ao']);
-            $email = addslashes($_POST['email']);
-            $username = addslashes($_POST['username']);
+        if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $associazione = writeRecord($_POST['nome_associazione']);
+            $nome = writeRecord($_POST['nome']);
+            $cognome = writeRecord($_POST['cognome']);
+            $ao = writeRecord($_POST['ao']);
+            $email = writeRecord($_POST['email']);
+            $username = writeRecord($_POST['username']);
             $psw = $_POST['psw'];
             $psw2 = $_POST['psw2'];
 
@@ -201,19 +208,48 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                 $email_db = cripta(addslashes($email),'encrypt');
                 $username_db = cripta(addslashes($username),'encrypt');
 
-                $sql = "INSERT INTO users (nome,cognome,ao,username,password,email,nome_societa,logo,last_access) VALUES ('$nome_db', '$cognome_db','$ao_db','$username_db','$psw','$email_db','$associazione_db','$logo','')";
-                
-                if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
-                    if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
-                        echo "</head><body style='padding: 25px;'><h1>Registrazione alla piattaforma avvenuta correttamente!</h1><p>Usa le credenziali inserite prima (username e password) per <a href='../' style='color: #0071e6; text-decoration:underline;'>accedere</a>.</p></body></html>";
-                        exit;
-                    }
+                /*if (isset($_POST['g-recaptcha-response'])) {
+                    $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+                    $secret = "6LdNMK4mAAAAADpi5Qt_GF01Y54gLl8XaW-2CdKz";
+                    $response = $_POST['g-recaptcha-response'];
+                    
+                    $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);      
+                    $recaptcha = json_decode($recaptcha);
+              
+                    if ($response->score >= 0.5) {*/
+                        $sql = "INSERT INTO users (nome,cognome,ao,username,password,email,nome_societa,logo,last_access) VALUES ('$nome_db', '$cognome_db','$ao_db','$username_db','$psw','$email_db','$associazione_db','$logo','')";
+                        
+                        if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
+                            if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
+                                echo "</head><body style='padding: 25px;'><h1>Registrazione alla piattaforma avvenuta correttamente!</h1><p>Usa le credenziali inserite prima (username e password) per <a href='../' style='color: #0071e6; text-decoration:underline;'>accedere</a>.</p></body></html>";
+                                exit;
+                            }
+                        /*}
+                        // Qui puoi inserire i dati nella form, oppure inviare una email.
+                        // Process the form data and DO SOMETHING
+                    } else {
+                        // Handle the error
+                        echo $response->error_codes[0];
+                        echo "reCaptcha non verificato";
+                    }*/
                 }
             }
         }
         ?>
     </head>
     <body>
+    <script>
+        function onClick(e) {
+            e.preventDefault();
+            grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LdNMK4mAAAAADpi5Qt_GF01Y54gLl8XaW-2CdKz', {action: 'LOGIN'});
+            // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
+            // reCAPTCHA Enterprise to the end user's browser.
+            // This token must be validated by creating an assessment.
+            // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+            });
+        }
+    </script>
         <form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" autocomplete="off" class="form">
             <h1>Registrazione associazioni</h1>
             <!-- Nome associazione -->
@@ -351,6 +387,8 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
             <input type="checkbox" name="app" id="app" style="width: 15px; height: 15px; margin-top: 30px;" oninput="registraAPP()">
             <label for="app">Voglio registrare la mia associazione anche nell'app per dispositivi Android.</label>
+
+            <div class="g-recaptcha" data-callback="verifyCallback" data-theme="light" data-sitekey="6LdNMK4mAAAAADpi5Qt_GF01Y54gLl8XaW-2CdKz" data-action="LOGIN"></div>
 
             <p style="color: red; font-weight: bold;">* Campi obbligatori</p>
             <button type="submit" name="submit" id="submit">Registrati</button>

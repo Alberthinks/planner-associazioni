@@ -76,7 +76,7 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
             <?php
             if (isset($_SESSION['session_id_lele_planner_0425'])) {
 
-            if (isset($_POST['submit']) && $_POST['submit']=="Crea evento") {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['submit']=="Crea evento") {
                 $titolo = writeRecord($_POST['titolo']);
                 $descrizione = writeRecord($_POST['descrizione']);
                 $data = strtotime(writeRecord($_POST['data']));
@@ -90,12 +90,18 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                     $ore = $ore." ore";
                 }
                 $minuti = writeRecord($_POST['minuti']);
-                if ($minuti == 1) {
-                    $minuti = " e ".$minuti." minuto";
-                } elseif ($ore == 0) {
-                    $minuti = $minuti." minuti";
+                if ($ore == "") {
+                    if ($minuti == 1) {
+                        $minuti = $minuti." minuto";
+                    } else {
+                        $minuti = $minuti." minuti";
+                    }
                 } else {
-                    $minuti = " e ".$minuti." minuti";
+                    if ($minuti == 1) {
+                        $minuti = " e ".$minuti." minuto";
+                    } else {
+                        $minuti = " e ".$minuti." minuti";
+                    }
                 }
                 $durata = $ore.$minuti;
                 $organizzatore = writeRecord($_POST['organizzatore']);
@@ -112,15 +118,19 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                 $db = 'planner';
                 $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
 
-                $myconn = mysqli_connect('localhost','root','mysql', 'accesses') or die (mysqli_error());
+                $myconn = mysqli_connect($host,$user,$pass, 'accesses') or die (mysqli_error());
                 $timestamp = cripta(date('d/m/Y H:i:s', strtotime("now")), "encrypt");
                 $ip = cripta($_SERVER['REMOTE_ADDR'], "encrypt");
                 $uname = cripta($username, "encrypt");
                 $name = cripta($nome, "encrypt");
                 $cog = cripta($cognome, "encrypt");
                 $societa = cripta($nome_societa, "encrypt");
-            
-                
+
+
+                $userfile_name = "locandina_default.png";       /* Inizializzo il nome del file caricato come stringa vuota, cosi' se
+                                                                non si carica nessun file, non viene memorizzato il valore null */
+                          
+                // Controllo se e' stata caricata una locandina
                 if (($_FILES['locandina']['name'] != null) && ($_FILES['locandina']['tmp_name'] != null)) {
                     // Cartella temporanea del file da caricare
                     $userfile_tmp = $_FILES['locandina']['tmp_name'];
@@ -140,33 +150,16 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                     }
 
                     $userfile_name = "file_".date("hisdmY", time()).".".$userfile_extension;
-                    
-                    // Inserisco i dati dell'evento nel database "planner"
-                    $sql = "INSERT INTO planner (titolo,descrizione,data,ora,durata,organizzatore,luogo,tipo,link_prenotazione,link_foto_video,data_modifica,validity) VALUES ('$titolo', '$descrizione','$data','$ora','$durata','$organizzatore','$luogo','$tipo','$link_prenotazione','$userfile_name','$data_modifica','$dataValidity')";
-                    
-                    // Controllo se esiste gia' un file con lo stesso nome e se sono in grado di caricare il file corrente
-                    if (!file_exists($uploaddir.$userfile_name) && move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name)) {
-                        if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
-                            // Prelevo dal database l'id da registrare nel registro delle attivita'
-                            $equery = mysqli_query($conn,"SELECT * FROM planner WHERE titolo='$titolo' AND organizzatore='$organizzatore' AND data='$data'") or die (mysqli_error($conn));
-                            $row = mysqli_fetch_array($equery);
-                            $accessesID = $row['id'];
-                            $action = cripta("Creazione dell'evento (id:".$accessesID.") '$titolo' del ".date('d/m/Y', $data)." alle $ora", "encrypt");
-                            $mysql = "INSERT INTO accesses (username,nome,cognome,nome_societa,ip,azione,timestamp,validity) VALUES ('$uname', '$name','$cog','$societa','$ip','$action','$timestamp','$dataValidity')";
+                }
 
-                            if ($rressultt = mysqli_query($myconn,$mysql) or die (mysqli_error($myconn))) {
-                                echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
-                            }
-                        }
-                    } elseif (file_exists($uploaddir.$userfile_name)) {
-                        echo "Il file esiste gi&agrave;!";
-                    } else {
-                        echo "Errore!";
-                    }
-                } else {
-                    // Inserisco i dati dell'evento nel database "planner"
-                    $sql = "INSERT INTO planner (titolo,descrizione,data,ora,durata,organizzatore,luogo,tipo,link_prenotazione,link_foto_video,data_modifica,validity) VALUES ('$titolo', '$descrizione','$data','$ora','$durata','$organizzatore','$luogo','$tipo','$link_prenotazione','locandina_default.png','$data_modifica','$dataValidity')";
 
+                // Inserisco i dati dell'evento nel database "planner"
+                $sql = "INSERT INTO planner (titolo,descrizione,data,ora,durata,organizzatore,luogo,tipo,link_prenotazione,link_foto_video,data_modifica,validity) VALUES ('$titolo', '$descrizione','$data','$ora','$durata','$organizzatore','$luogo','$tipo','$link_prenotazione','$userfile_name','$data_modifica','$dataValidity')";
+                
+
+                // Controllo se esiste gia' un file con lo stesso nome e se sono in grado di caricare il file corrente (o se il file si chiama "locandina_default.png", che e' gia' salvata di default)
+                if ((!file_exists($uploaddir.$userfile_name) || $userfile_name == "locandina_default.png")) {
+                    move_uploaded_file($userfile_tmp, $uploaddir.$userfile_name);
                     if ($result = mysqli_query($conn,$sql) or die (mysqli_error($conn))) {
                         // Prelevo dal database l'id da registrare nel registro delle attivita'
                         $equery = mysqli_query($conn,"SELECT * FROM planner WHERE titolo='$titolo' AND organizzatore='$organizzatore' AND data='$data'") or die (mysqli_error($conn));
@@ -179,6 +172,19 @@ $nome_societa = $_SESSION['session_nome-societa_lele_planner_0425'];
                             echo "<script type=\"text/javascript\">location.replace(\"../\");</script>";
                         }
                     }
+                } elseif (file_exists($uploaddir.$userfile_name) && $userfile_name != "locandina_default.png") {
+                    echo "Il file esiste gi&agrave;!";
+                } else {
+                    echo "Errore!";
+                }
+
+                if ($_POST['facebookPost'] == "true") {
+                    // API Facebook
+
+
+
+
+                    
                 }
 
             }

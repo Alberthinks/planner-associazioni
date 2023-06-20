@@ -162,21 +162,9 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
                             echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
                         
-                        echo "<p><a onclick=\"addToCalendar()\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
-                        echo "<p><a onclick=\"shareEvent()\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
+                        echo "<p><a onclick=\"addToAndroidCalendar('".$titolo."', '".$descrizione."', '".$luogo."', '".date("Ymd", $data).$ora."', '".$endTime."')\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
+                        echo "<p><a onclick=\"sharerEvent('".$titolo."','".$url."')\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
 
-
-                        echo "<script>
-                            // Funzione per aggiungere l'evento al calendario
-                            function addToCalendar() {
-                                APPlanner.addToCalendar(\"".$titolo."\", \"".$descrizione."\", \"".$luogo."\", \"".date("Ymd", $data).$ora."\", \"".$endTime."\");
-                            }
-
-                            // Funzione per condividere l'evento con altre persone
-                            function shareEvent() {
-                                APPlanner.shareEvent(\"".$titolo."\",\"".$url."\");
-                            }
-                        </script>";
 
                         echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
                         echo "</div>";
@@ -255,43 +243,34 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         });
                     </script> 
                     <?php
-
-                    if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
+                    echo "<img style='margin-top: 40px; width: 60px; margin-bottom: 30px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
+                    
+                    if ($link_foto_video != "" && $link_foto_video != "locandina_default.png") {
+                        echo "<hr>";
                         echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
-                        
-                    echo "<p><a onclick=\"addToCalendar".$id."()\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
-                    echo "<p><a onclick=\"shareEvent".$id."()\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
-
-                    // Parte per il calcolo della data e dell'ora di fine dell'evento per l'app Android
-                    $end = explode(" ", $durata);
-                    if (strpos($durata, " or") == null) {
-                        if (strlen($end[0]) == 1) {
-                            $end[0] = "0".$end[0];
-                        }
-                        $endTime = date("Ymd", $data)."00:".$end[0];
-                    } else {
-                        if (strlen($end[0]) == 1) {
-                            $end[0] = "0".$end[0];
-                        }
-                        if (strlen($end[3]) == 1) {
-                            $end[3] = "0".$end[3];
-                        }
-                        $endTime = date("Ymd", $data).$end[0].":".$end[3];
                     }
 
-                    echo "<script>
-                        // Funzione per aggiungere l'evento al calendario
-                        function addToCalendar".$id."() {
-                            APPlanner.addToCalendar(\"".$titolo."\", \"".$descrizione."\", \"".$luogo."\", \"".date("Ymd", $data).$ora."\", \"".$endTime."\");
+                        // Parte per il calcolo della data e dell'ora di fine dell'evento per l'app Android
+                        $end = explode(" ", $durata);
+                        if (strpos($durata, " or") == null) {
+                            if (strlen($end[0]) == 1) {
+                                $end[0] = "0".$end[0];
+                            }
+                            $endTime = date("Ymd", $data)."00:".$end[0];
+                        } else {
+                            if (strlen($end[0]) == 1) {
+                                $end[0] = "0".$end[0];
+                            }
+                            if (strlen($end[3]) == 1) {
+                                $end[3] = "0".$end[3];
+                            }
+                            $endTime = date("Ymd", $data).$end[0].":".$end[3];
                         }
-
-                        // Funzione per condividere l'evento con altre persone
-                        function shareEvent".$id."() {
-                            APPlanner.shareEvent(\"".$titolo."\",\"".$url."\");
-                        }
-                    </script>";
-
-                    echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
+                        
+                    echo "<hr>";
+                    echo "<p><a onclick=\"addToAndroidCalendar('".$titolo."', '".$descrizione."', '".$luogo."', '".date("Ymd", $data).$ora."', '".$endTime."')\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
+                    echo "<hr>";
+                    echo "<p><a onclick=\"sharerEvent('".$titolo."', '".$url."')\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
                     echo "</div>";
 
                     if ($link_prenotazione != null || $link_prenotazione != "") {
@@ -300,6 +279,18 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                 }
             }
         }
+
+        echo "<script>
+        // Funzione per aggiungere l'evento al calendario
+        function addToAndroidCalendar(titolo, descrizione, luogo, dataInizio, dataFine) {
+            APPlanner.addToCalendar(titolo, descrizione, luogo, dataInizio, dataFine);  /*'".$titolo."', '".$descrizione."', '".$luogo."', '".date("Ymd", $data).$ora."', '".$endTime."');*/
+        }
+
+        // Funzione per condividere l'evento con altre persone
+        function sharerEvent(titolo, url) {
+            APPlanner.shareEvent(titolo, url);
+        }
+    </script>";
             ?>
         </div>
     </body>
