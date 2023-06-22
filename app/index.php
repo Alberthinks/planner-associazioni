@@ -93,13 +93,13 @@ $ao = $_SESSION['session_ao_lele_planner_0425'];
                     echo "<table>\n"; 
                     echo "<tr>\n
                     <th class=\"mese\" colspan=\"2\">\n
-                    <a class=\"cambia_mese material-symbols-outlined\" style=\"padding-left: 10px; padding-right: 0;\" href=\"?plannerID=".$plannerIDnumber."&d=" . $precedente . "\">arrow_back_ios</a>\n
+                    <a class=\"cambia_mese material-symbols-outlined\" style=\"padding-left: 10px; padding-right: 0;\" href=\"?plannerID=".$plannerID."&d=" . $precedente . "\">arrow_back_ios</a>\n
                     </th>\n
                     <th class=\"mese\" colspan=\"3\">\n
                     " . $nomi_mesi[$m-1] . " " . $y . "
                     </th>\n
                     <th class=\"mese\" colspan=\"2\">
-                    <a class=\"cambia_mese material-symbols-outlined\" href=\"?plannerID=".$plannerIDnumber."&d=" . $successivo . "\">arrow_forward_ios</a>\n
+                    <a class=\"cambia_mese material-symbols-outlined\" href=\"?plannerID=".$plannerID."&d=" . $successivo . "\">arrow_forward_ios</a>\n
                     </th>\n
                     </tr>\n";
                     foreach($nomi_giorni as $v)

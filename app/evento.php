@@ -159,14 +159,18 @@ $conn = mysqli_connect($host,$user,$pass, $db) or die (mysqli_error());
                         </script> 
 
                         <?php
-                        if ($link_foto_video != "" && $link_foto_video != "locandina_default.png")
-                            echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                        echo "<img style='margin-top: 40px; width: 60px; margin-bottom: 30px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
                         
+                        if ($link_foto_video != "" && $link_foto_video != "locandina_default.png") {
+                            echo "<hr>";
+                            echo "<p><a href='showLocandina.php?url=".$link_foto_video."'><i class='material-symbols-outlined'>draft</i>Vedi locandina</a></p>";
+                        }
+                        
+                        echo "<hr>";
                         echo "<p><a onclick=\"addToAndroidCalendar('".$titolo."', '".$descrizione."', '".$luogo."', '".date("Ymd", $data).$ora."', '".$endTime."')\"><i class=\"material-symbols-outlined\">event</i> Aggiungi al calendario</a></p>";
+                        echo "<hr>";
                         echo "<p><a onclick=\"sharerEvent('".$titolo."','".$url."')\"><i class=\"material-symbols-outlined\">share</i> Condividi</a></p>";
 
-
-                        echo "<img style='margin-top: 40px; width: 60px;' alt='logo organizzatore' src='../settings/gestione-utenti/nuovo/".cripta($fetch2['logo'],"decrypt")."'><br>\n";
                         echo "</div>";
 
 
